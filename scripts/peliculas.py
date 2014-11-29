@@ -6,7 +6,7 @@ import datetime
 import PyRSS2Gen
 import time
 
-soup = BeautifulSoup(open("scripts/dvdr-_-movies.xml"))
+soup = BeautifulSoup(open('app-root/repo/scripts/dvdr-_-movies.xml'))
 L_titulos = soup.find_all('title')
 L_titulos = [L_titulos[i].string for i in range(1, len(L_titulos))]
 L_enlaces = soup.find_all('link')
@@ -53,7 +53,7 @@ if W_titulos[0] != L_titulos[0]:
 
         items=rss_items)
     try:
-        with open('scripts/dvdr-_-movies.xml', 'w') as outfile:
+        with open('app-root/repo/scripts/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
         print('RSS update ... [OK]')
 
