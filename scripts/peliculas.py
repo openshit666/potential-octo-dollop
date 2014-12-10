@@ -1,12 +1,21 @@
 from bs4 import BeautifulSoup
+import logging
 import urllib.request
 import urllib.parse
-import re
 import datetime
 import PyRSS2Gen
-import time
+import re
+import os
 
-soup = BeautifulSoup(open('app-root/repo/scripts/dvdr-_-movies.xml'))
+pathlog = os.environ['OPENSHIFT_LOG_DIR']
+pathrepo = os.environ['OPENSHIFT_REPO_DIR']
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s :: DVDR :: %(levelname)s :: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filename=pathlog+'scripts.log')
+
+soup = BeautifulSoup(open(pathrepo+'scripts/dvdr-_-movies.xml'))
 L_titulos = soup.find_all('title')
 L_titulos = [L_titulos[i].string for i in range(1, len(L_titulos))]
 L_enlaces = soup.find_all('link')
@@ -32,7 +41,7 @@ if W_titulos[0] != L_titulos[0]:
     del W_titulos[e:]
     del W_enlaces[e:]
     for t in W_titulos:
-        print(t)
+        logging.debug('%s ... [OK]', t)
     W_titulos.extend(L_titulos)
     W_enlaces.extend(L_enlaces)
     titulos = W_titulos
@@ -53,20 +62,12 @@ if W_titulos[0] != L_titulos[0]:
 
         items=rss_items)
     try:
-        with open('app-root/repo/scripts/dvdr-_-movies.xml', 'w') as outfile:
+        with open(pathrepo+'scripts/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
-        print('RSS update ... [OK]')
+        logging.info('RSS update ... [OK]')
 
     except:
-        print('404 Not found. ¡You shall not pass! Algo ha petao premoh')
+        logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
 
 elif W_titulos[0] == L_titulos[0]:
-    print('No hace falta actualizar!')
-
-x = 6
-for i in range(x):
-    print('.', end="", flush=True)
-    time.sleep(0.5)
-    if i == x-1:
-        print(' bye!')
-        time.sleep(0.5)
+    logging.info('No hace falta actualizar!')
