@@ -1,5 +1,5 @@
 #! /bin/bash
-echo "*************///*************" >> ${OPENSHIFT_LOG_DIR}scripts.log
+echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log
 python ${OPENSHIFT_REPO_DIR}scripts/peliculas.py
 python ${OPENSHIFT_REPO_DIR}scripts/rtve.py
 echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log

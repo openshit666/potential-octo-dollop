@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 error = False
 
-soup = BeautifulSoup(open(pathrepo+'scripts/rtve-_-docs.xml'))
+soup = BeautifulSoup(open(pathrepo+'xml/rtve-_-docs.xml'))
 
 L_titulos = soup.find_all('title')
 L_titulos = [L_titulos[i].string for i in range(1, len(L_titulos))]
@@ -87,7 +87,7 @@ if W_titulos[0] != L_titulos[0]:
 
         items=rss_items)
     try:
-        with open(pathrepo+'scripts/rtve-_-docs.xml', 'w') as outfile:
+        with open(pathrepo+'xml/rtve-_-docs.xml', 'w') as outfile:
             rss.write_xml(outfile)
         logging.info('RSS update ... [OK]')
 
