@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from http.cookies import  SimpleCookie
 import os
 
 def application(environ, start_response):
@@ -282,7 +283,14 @@ $ git push</pre>
 </html>'''
 
     status = '200 OK'
-    response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
+
+    # create a cookie object
+    cookie = SimpleCookie()
+    cookie['likes'] = "cheese"
+    cookieheaders = ('Set-Cookie', cookie['likes'].OutputString())
+
+
+    response_headers = [cookieheaders, ('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
     #
     start_response(status, response_headers)
     return [response_body.encode('utf-8') ]
