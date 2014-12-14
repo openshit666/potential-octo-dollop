@@ -1,7 +1,7 @@
 #! /bin/bash
 
-curl --silent http://www.google.ie/gwt/x?u=http://pi-ton.rhcloud.com/ > /dev/null
-echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log
-python ${OPENSHIFT_REPO_DIR}scripts/peliculas.py
-python ${OPENSHIFT_REPO_DIR}scripts/rtve.py
-echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log
+curl --silent http://www.google.ie/gwt/x?u=http://pi-ton.rhcloud.com/ > /dev/null;
+echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+python ${OPENSHIFT_REPO_DIR}scripts/peliculas.py;
+python ${OPENSHIFT_REPO_DIR}scripts/rtve.py;
+echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
