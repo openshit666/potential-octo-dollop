@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import logging
 import urllib.request
-import urllib.parse
 import datetime
 import PyRSS2Gen
 import re
