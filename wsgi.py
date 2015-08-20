@@ -20,7 +20,7 @@ def application(environ, start_response):
         ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_REPO_DIR'] + '/xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
-        response_body = r.read().decode()
+        response_body = r.read()
         r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[environ['PATH_INFO'].split('.')[-1]]
@@ -41,7 +41,7 @@ def application(environ, start_response):
 
     response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
     start_response(status, response_headers)
-    return [response_body.encode('utf8')]
+    return [response_body]
 
 #
 # Below for testing only

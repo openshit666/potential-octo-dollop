@@ -22,7 +22,7 @@ L_enlaces = soup.find_all('link')
 L_enlaces = [L_enlaces[i].string for i in range(1, len(L_enlaces))]
 
 url = 'http://todotorrents.com'
-data = urllib.parse.urlencode({'Submit2': 'Buscar', 'buscar': '[MoviesDVDR]', 'cate': '3', 'estado': '1'})
+data = urllib.parse.urlencode({'Submit2': 'Buscar', 'buscar': 'MoviesDVDR', 'cate': '3', 'estado': '1'})
 data = data.encode('iso-8859-1')
 req = urllib.request.Request(url)
 req.add_header('User-Agent', 'Mozilla/5.0')
