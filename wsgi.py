@@ -6,7 +6,7 @@ def application(environ, start_response):
 
     ItsMe = False
     response_body = None
-    files = os.listdir(os.environ['OPENSHIFT_REPO_DIR']+'/xml')
+    files = os.listdir(os.environ['OPENSHIFT_REPO_DIR']+'xml')
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -19,7 +19,7 @@ def application(environ, start_response):
         response_body = '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>'.join(response_body)
         ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
-        r = open(os.environ['OPENSHIFT_REPO_DIR'] + '/xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
+        r = open(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
         response_body = r.read()
         r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}

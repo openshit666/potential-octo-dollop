@@ -41,14 +41,14 @@ pathlog = os.environ['OPENSHIFT_LOG_DIR']
 pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 
 
-with open(pathrepo + '/xml/lamaximaDB.json', 'r') as r:
+with open(pathrepo + 'xml/lamaximaDB.json', 'r') as r:
     dbcanciones = r.read()
     dbcanciones = loads(dbcanciones)
 canciones = getsongs()
 if canciones is not False:
     todb = checkdb(canciones, dbcanciones)
     if todb is True:
-        with open(pathrepo + 'lamaximaDB', 'w') as w:
+        with open(pathrepo + 'lamaximaDB.json', 'w') as w:
             w.write(dumps(dbcanciones, separators=(',', ':'), ensure_ascii=False))
         logging.info('DB update +{} ... [OK]'.format(len(todb)))
     else:
