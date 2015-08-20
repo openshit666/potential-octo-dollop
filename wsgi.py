@@ -31,7 +31,7 @@ def application(environ, start_response):
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
-  .logo {
+.logo {
     background-size: cover;
     height: 58px;
     width: 180px;
