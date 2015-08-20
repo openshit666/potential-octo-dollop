@@ -25,7 +25,7 @@ def application(environ, start_response):
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[environ['PATH_INFO'].split('.')[-1]]
     else:
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¿login?</body></html>'''
+        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡¿login!?</body></html>'''
         ctype = 'text/html; charset=UTF-8'
 
     # always It's OK, okeeeya!?
