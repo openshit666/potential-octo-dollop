@@ -2,6 +2,7 @@ from json import loads, dumps
 from bs4 import BeautifulSoup
 from time import sleep
 import urllib.request
+import logging
 
 
 def getsongs():
