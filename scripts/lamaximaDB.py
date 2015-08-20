@@ -26,11 +26,14 @@ def getsongs():
 
 
 def checkdb(canciones, dbcanciones):
+    global count
+    count = 0
     todb = False
     for c in canciones:
         if c not in dbcanciones['canciones']:
             dbcanciones['canciones'].append(c)
             todb = True
+            count+=1
     return todb
 
 
@@ -48,9 +51,9 @@ canciones = getsongs()
 if canciones is not False:
     todb = checkdb(canciones, dbcanciones)
     if todb is True:
-        with open(pathrepo + 'lamaximaDB.json', 'w') as w:
+        with open(pathrepo + 'xml/lamaximaDB.json', 'w') as w:
             w.write(dumps(dbcanciones, separators=(',', ':'), ensure_ascii=False))
-        logging.info('DB update +{} ... [OK]'.format(len(todb)))
+        logging.info('DB update +{} ... [OK]'.format(count))
     else:
         logging.info('No hace falta actualizar!')
 else:
