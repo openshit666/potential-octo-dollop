@@ -12,7 +12,7 @@ def application(environ, start_response):
                     for key, value in sorted(environ.items())]
         response_body = '\n'.join(response_body)
     elif environ['PATH_INFO'] == '/asd':
-        r = open(os.environ['OPENSHIFT_REPO_DIR']'/xml/dvdr-_-movies.xml', 'r')
+        r = open(os.environ['OPENSHIFT_REPO_DIR']+'/xml/dvdr-_-movies.xml', 'r')
         response_body = r.read()
         r.close()
         ctype = 'application/json'
