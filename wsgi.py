@@ -6,7 +6,7 @@ def application(environ, start_response):
 
     ItsMe = False
     response_body = None
-    files = os.path(os.environ['OPENSHIFT_REPO_DIR']+'/xml')
+    files = os.listdir(os.environ['OPENSHIFT_REPO_DIR']+'/xml')
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
