@@ -18,7 +18,6 @@ def getsongs():
         titulos = soup.find_all(attrs={"name": "cue_title"})
         titulos = [t for t in titulos if t.string != '¿Te gusta @maximafm_radio? Compártelo con tus amigos, síguenos!!!']
         canciones = [artistas[i].string.replace(',', ', ') + ' - ' + titulos[i].string.replace(',', ', ') for i in range(len(artistas))]
-        print(canciones)
         return canciones
     except:
         pass
