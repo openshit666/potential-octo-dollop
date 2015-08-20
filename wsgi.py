@@ -17,7 +17,8 @@ def application(environ, start_response):
         response_body = ['<a href="/xml/{}" download>{}</a><br>'.format(f,f) for f in files]
         response_body.append('</body></html>')
         response_body = '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>'.join(response_body)
-        ctype = 'text/html'
+        response_body = response_body.encode('utf8')
+        ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_REPO_DIR'] + '/xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
         response_body = r.read()
@@ -26,6 +27,7 @@ def application(environ, start_response):
         ctype = ctypes[environ['PATH_INFO'].split('.')[-1]]
     else:
         response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¿login?</body></html>'''
+        response_body = response_body.encode('utf8')
         ctype = 'text/html; charset=UTF-8'
 
     # always It's OK, okeeeya!?
