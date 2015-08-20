@@ -55,7 +55,7 @@ if W_titulos[0] != L_titulos[0]:
 
     rss = PyRSS2Gen.RSS2(
         title='MoviesDVDR',
-        link='http://pi-ton.rhcloud.com/dvdr-_-movies.xml',
+        link='http://pi-ton.rhcloud.com/xml/dvdr-_-movies.xml',
         description='TodoTorrents RSS Feed for DVDR-Movies',
 
         lastBuildDate=datetime.datetime.now(),

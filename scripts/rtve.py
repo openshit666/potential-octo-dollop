@@ -79,7 +79,7 @@ if W_titulos[0] != L_titulos[0]:
 
     rss = PyRSS2Gen.RSS2(
         title='RTVE Docs',
-        link='http://pi-ton.rhcloud.com/rtve-_-docs.xml',
+        link='http://pi-ton.rhcloud.com/xml/rtve-_-docs.xml',
         description='RTVE RSS Feed for documentaries',
 
         lastBuildDate=datetime.datetime.now(),
