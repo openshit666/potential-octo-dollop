@@ -31,15 +31,14 @@ def checkdb(canciones, dbcanciones):
             dbcanciones['canciones'].append(c)
             todb = True
     return todb
-                
 
+
+pathlog = os.environ['OPENSHIFT_LOG_DIR']
+pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: DBMAXIMA :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
                     filename=pathlog+'scripts.log')
-pathlog = os.environ['OPENSHIFT_LOG_DIR']
-pathrepo = os.environ['OPENSHIFT_REPO_DIR']
-
 
 with open(pathrepo + 'xml/lamaximaDB.json', 'r') as r:
     dbcanciones = r.read()
