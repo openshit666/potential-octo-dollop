@@ -29,7 +29,8 @@ if regexplast != hoy:
         text = re.sub('\d{4}/\d{1,2}/\d{1,2}', hoy, c.get('url'))
         text = re.sub('s_\d{8}', 's_' + strftime('%Y%m%d', localtime()), text)
         c['url'] = text
-    soup.lastbuilddate.string = strftime('%a, %d %h %Y %H:%m:%S GMT', localtime())
+    for p in soup.find_all('pubdate'):
+        p.string = strftime('%a, %d %h %Y %H:%m:%S +0200', localtime())
     with open('py/lostoros.xml', "wb") as f:
         f.write(soup.renderContents())
         logging.info('RSS update ... [OK]')
