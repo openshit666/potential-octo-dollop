@@ -11,9 +11,9 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: LosToros :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog+'scripts.log')
+                    filename=pathlog + 'scripts.log')
 
-soup = BeautifulSoup(open(pathrepo+'xml/lostoros.xml'))
+soup = BeautifulSoup(open(pathrepo + 'xml/lostoros.xml'))
 guids = soup.find_all('guid')
 regexplast = re.search('\d{4}/\d{1,2}/\d{1,2}', guids[0].get_text()).group()
 hoy = strftime('%Y/%-m/%-d', localtime())
@@ -32,7 +32,7 @@ if regexplast != hoy:
         c['url'] = text
     for p in soup.find_all('pubdate'):
         p.string = strftime('%a, %d %h %Y %H:%m:%S +0200', localtime())
-    with open('py/lostoros.xml', "wb") as f:
+    with open(pathrepo + 'xml/lostoros.xml', "wb") as f:
         f.write(soup.renderContents())
         logging.info('RSS update ... [OK]')
 else:
