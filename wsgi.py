@@ -16,13 +16,19 @@ def application(environ, start_response):
     if environ['PATH_INFO'] == '/' and ItsMe is True:
         response_body = ['<a href="/xml/{}" download>{}</a><br>'.format(f,f) for f in files]
         response_body.append('</body></html>')
-        response_body = '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>'.join(response_body)
+        response_body = '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>' + response_body
         ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
-        with open(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + environ['PATH_INFO'].split('/')[-1], 'r') as r:
-            response_body = r.read()
+        r = open(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
+        response_body = r.read()
+        r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[environ['PATH_INFO'].split('.')[-1]]
+    elif environ['PATH_INFO'] == '/xml/lostoros.xml':
+        r = open(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/lostoros.xml', 'r')
+        response_body = r.read()
+        r.close()
+        ctype = 'application/xml; charset=UTF-8'
     else:
         response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡¿login!?</body></html>'''
         ctype = 'text/html; charset=UTF-8'
@@ -40,7 +46,8 @@ def application(environ, start_response):
 
     response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
     start_response(status, response_headers)
-    return [response_body.encode('utf8')]
+    return [response_body]
+#    return [response_body.encode('utf8')]
 
 #
 # Below for testing only

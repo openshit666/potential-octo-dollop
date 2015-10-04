@@ -2,8 +2,8 @@
 
 hora=$(date +%H)
 if [[ $(($hora % 2)) -eq 0 ]]; then
-    echo "*************@@*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+    echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
     python ${OPENSHIFT_REPO_DIR}scripts/lamaximaDB.py;
-    echo "*************@@*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+    python ${OPENSHIFT_REPO_DIR}scripts/m80DB.py;
+    echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
 fi
-
