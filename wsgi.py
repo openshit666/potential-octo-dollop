@@ -16,7 +16,8 @@ def application(environ, start_response):
     if environ['PATH_INFO'] == '/' and ItsMe is True:
         response_body = ['<a href="/xml/{}" download>{}</a><br>'.format(f,f) for f in files]
         response_body.append('</body></html>')
-        response_body = '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>' + response_body
+        response_body.insert(0, '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>')
+        response_body = ''.join(response_body)
         ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
