@@ -7,3 +7,10 @@ if [[ $(($hora % 2)) -eq 0 ]]; then
     python ${OPENSHIFT_REPO_DIR}scripts/m80DB.py;
     echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
 fi
+
+dia=$(date +%a)
+if [[ $dia == "lun" && $hora -eq 00 ]] || [[ $dia == "lun" && $hora -eq 01 ]]; then
+    echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+    python ${OPENSHIFT_REPO_DIR}scripts/lostoros.py;
+    echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+fi

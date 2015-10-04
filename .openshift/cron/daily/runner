@@ -5,10 +5,3 @@ echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
 python ${OPENSHIFT_REPO_DIR}scripts/peliculas.py;
 python ${OPENSHIFT_REPO_DIR}scripts/rtve.py;
 echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
-
-dia=$(date +%a)
-if [[ $dia == "dom" ]] || [[ $dia == "lun" ]]; then
-    echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
-    python ${OPENSHIFT_REPO_DIR}scripts/lostoros.py;
-    echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
-fi
