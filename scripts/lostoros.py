@@ -1,5 +1,6 @@
-from bs4 import BeautifulSoup
 from time import localtime, strftime
+from bs4 import BeautifulSoup
+import logging
 import re
 import os
 
