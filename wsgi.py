@@ -45,7 +45,7 @@ def application(environ, start_response):
 #    cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
 #    response_headers = [cookieheaders, ('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
 
-    response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body)))]
+    response_headers = [('Content-Type', ctype), ('Content-Length', str(len(response_body.encode('utf8'))))]
     start_response(status, response_headers)
     return [response_body.encode('utf8')]
 #    return [response_body]
