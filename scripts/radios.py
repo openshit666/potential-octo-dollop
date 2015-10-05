@@ -32,14 +32,15 @@ def checkdb(canciones, dbcanciones):
     return todb
 
 
+pathlog = os.environ['OPENSHIFT_LOG_DIR']
+pathrepo = os.environ['OPENSHIFT_REPO_DIR']
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s :: RADIOS :: %(levelname)s :: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filename=pathlog+'scripts.log')
+
 radios = ['MAXIMAFM', 'M80RADIO']
 for radio in radios:
-    pathlog = os.environ['OPENSHIFT_LOG_DIR']
-    pathrepo = os.environ['OPENSHIFT_REPO_DIR']
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s :: {} :: %(levelname)s :: %(message)s'.format(radio),
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        filename=pathlog+'scripts.log')
     with open(pathrepo + 'xml/{}.json'.format(radio), 'r') as r:
         dbcanciones = r.read()
         dbcanciones = loads(dbcanciones)
@@ -49,7 +50,7 @@ for radio in radios:
         if todb is True:
             with open(pathrepo + 'xml/{}.json'.format(radio), 'w') as w:
                 w.write(dumps(dbcanciones, separators=(',', ':'), ensure_ascii=False))
-            logging.info('DB update +{} ... [OK]'.format(count))
+            logging.info('{}DB update +{} ... [OK]'.format(radio, count))
         else:
             logging.info('No hace falta actualizar!')
     else:
