@@ -32,15 +32,14 @@ def checkdb(canciones, dbcanciones):
     return todb
 
 
-pathlog = os.environ['OPENSHIFT_LOG_DIR']
-pathrepo = os.environ['OPENSHIFT_REPO_DIR']
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: {} :: %(levelname)s :: %(message)s'.format(radio),
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog+'scripts.log')
-
 radios = ['MAXIMAFM', 'M80RADIO']
 for radio in radios:
+    pathlog = os.environ['OPENSHIFT_LOG_DIR']
+    pathrepo = os.environ['OPENSHIFT_REPO_DIR']
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s :: {} :: %(levelname)s :: %(message)s'.format(radio),
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        filename=pathlog+'scripts.log')
     with open(pathrepo + 'xml/{}.json'.format(radio), 'r') as r:
         dbcanciones = r.read()
         dbcanciones = loads(dbcanciones)
