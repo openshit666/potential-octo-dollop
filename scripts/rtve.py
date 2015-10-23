@@ -29,7 +29,7 @@ url = 'http://www.rtve.es/drmn/iso/catalog/?&col=3&extended=S&de=N&ll=N&playerid
 req = urllib.request.Request(url)
 req.add_header('User-Agent', 'Mozilla/5.0')
 r = urllib.request.urlopen(req)
-soup = BeautifulSoup(r.read())
+soup = BeautifulSoup(r.read().decode('iso-8859-1'))
 nfo = soup.find_all('a', 'linkExtendedTrue')
 
 W_titulos = [v.string for v in nfo]
@@ -49,7 +49,7 @@ if W_titulos[0] != L_titulos[0]:
         reque = urllib.request.Request(urlapi)
         reque.add_header('User-Agent', 'Mozilla/5.0')
         f = urllib.request.urlopen(reque)
-        data = f.read().decode()
+        data = f.read().decode('utf-8', 'ignore')
         datasoup = BeautifulSoup(data)
         try:
             link = re.findall('linkHtml\(\n\t\t\'(.*)\',', data)[0]
