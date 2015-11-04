@@ -33,6 +33,8 @@ def application(environ, start_response):
         ctype = 'application/xml; charset=UTF-8'
     elif environ['PATH_INFO'] == '/daily' or environ['PATH_INFO'] == '/hourly' and ItsMe is True:
         cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(environ['PATH_INFO'])])
+        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡{} lanzado correctamente!</body></html>'''.format(environ['PATH_INFO'].replace('/').title())
+        ctype = 'text/html; charset=UTF-8'
     else:
         response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡¿login!?</body></html>'''
         ctype = 'text/html; charset=UTF-8'
