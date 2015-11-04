@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from http.cookies import  SimpleCookie
+from subprocess import check_call as cc
 import os
 
 def application(environ, start_response):
@@ -30,6 +31,8 @@ def application(environ, start_response):
         response_body = r.read()
         r.close()
         ctype = 'application/xml; charset=UTF-8'
+    elif environ['PATH_INFO'] == 'daily' or environ['PATH_INFO'] == 'hourly' and ItsMe is True:
+        cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(environ['PATH_INFO'])])
     else:
         response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡¿login!?</body></html>'''
         ctype = 'text/html; charset=UTF-8'
