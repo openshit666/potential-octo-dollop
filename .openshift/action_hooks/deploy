@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ln -sf ${OPENSHIFT_DATA_DIR}/xml/* ${OPENSHIFT_REPO_DIR}/xml/

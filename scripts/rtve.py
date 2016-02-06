@@ -53,9 +53,12 @@ if W_titulos[0] != L_titulos[0]:
         datasoup = BeautifulSoup(data)
         try:
             link = re.findall('linkHtml\(\n\t\t\'(.*)\',', data)[0]
-            url_video = link
-            W_descarga.append(url_video)
-            logging.debug('%s ... [OK]', W_titulos[i])
+            if not link.endswith('.mp4') and not link.endswith('.flv'):
+                raise Exception
+            else:
+                url_video = link
+                W_descarga.append(url_video)
+                logging.debug('%s ... [OK]', W_titulos[i])
         except:
             error = True
             error_res = datasoup.find('div', 'error_res').string

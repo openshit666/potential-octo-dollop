@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
-import logging
 import urllib.request
 import urllib.parse
-import datetime
 import PyRSS2Gen
-import re
+import datetime
+import logging
 import os
+import re
 
 pathlog = os.environ['OPENSHIFT_LOG_DIR']
 pathrepo = os.environ['OPENSHIFT_REPO_DIR']
@@ -29,12 +29,9 @@ req.add_header('User-Agent', 'Mozilla/5.0')
 req.add_header('Content-Type', 'application/x-www-form-urlencoded;charset=iso-8859-1')
 r = urllib.request.urlopen(req, data)
 soup = BeautifulSoup(r.read().decode('iso-8859-1'))
-#a_hrefs = soup.find_all(href=re.compile('/download'))
 a_titles = soup.find_all(href=re.compile('/descargar'))
-
-#W_enlaces = ['http://todotorrents.com'+v.get('href') for v in a_hrefs]
-W_enlaces = ['http://todotorrents.com/download.php?id='+re.findall('/descargar/(.*)/', v.get('href'))[0] for v in a_titles]
-W_titulos = [v.get('title').split('DVDR')[0].strip() for v in a_titles]
+W_enlaces = ['http://todotorrents.com/download.php?id=' + re.findall('/descargar/(.*)/', v.get('href'))[0] for v in a_titles if 'DVD9' not in v.get_text()]
+W_titulos = [v.get('title').split('DVDR')[0].strip() for v in a_titles if 'DVD9' not in v.get_text()]
 
 if W_titulos[0] != L_titulos[0]:
     e = W_titulos.index(L_titulos[0])

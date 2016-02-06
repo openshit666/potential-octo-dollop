@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from http.cookies import  SimpleCookie
 from subprocess import check_call as cc
+from http.cookies import  SimpleCookie
+from time import localtime, strftime
 import os
 
 def application(environ, start_response):
@@ -8,6 +9,7 @@ def application(environ, start_response):
     ItsMe = False
     response_body = None
     files = os.listdir(os.environ['OPENSHIFT_REPO_DIR']+'xml')
+    files.remove('.gitkeep')
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -15,9 +17,9 @@ def application(environ, start_response):
             ItsMe = True
 
     if environ['PATH_INFO'] == '/' and ItsMe is True:
-        response_body = ['<a href="/xml/{}" download>{}</a><br>'.format(f,f) for f in files]
-        response_body.append('</body></html>')
-        response_body.insert(0, '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>')
+        response_body = ['<tr><td><a href="/xml/{}" download>{}</a></td><td>{} kB</td><td>{}</td></tr>'.format(f,f,round(os.stat(os.environ['OPENSHIFT_REPO_DIR']+'xml/'+f).st_size/1024, 1),strftime('%x at %X', localtime(os.stat(os.environ['OPENSHIFT_REPO_DIR']+'xml/'+f).st_mtime))) for f in files]
+        response_body.append('''<tr><td><button onclick="go('/daily');">Daily</button></td><td></td><td><button onclick="go('/hourly');">Hourly</button></td></tr></table><center><script type="text/javascript">function changetext(text){over=document.querySelector("#over");document.querySelector("#result").textContent=text;over.style.display="block";setTimeout(function(){over.style.display="none";},2e3);}function go(cual){var xmlhttp=new XMLHttpRequest();xmlhttp.open("GET",cual);xmlhttp.onreadystatechange=function(){if(xmlhttp.readyState==4&&xmlhttp.status==200)   {changetext(xmlhttp.responseText);}else{changetext(xmlhttp.statusText+" "+xmlhttp.status);}};xmlhttp.send(null);}</script></body></html>''')
+        response_body.insert(0, '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><style>td {text-align:center}</style><body><center><div id="over"style="display:none;position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;-moz-opacity:0.8;opacity:.80;filter:alpha(opacity=80);"><p id="result"style="color:red;margin-top:15%;margin-left:45%;"></p></div><table><th>Archivo</th><th>Tamaño</th><th>Fecha modif.</th>')
         response_body = ''.join(response_body)
         ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
@@ -32,11 +34,14 @@ def application(environ, start_response):
         r.close()
         ctype = 'application/xml; charset=UTF-8'
     elif environ['PATH_INFO'] == '/daily' or environ['PATH_INFO'] == '/hourly' and ItsMe is True:
-        cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(environ['PATH_INFO'])])
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡{} lanzado correctamente!</body></html>'''.format(environ['PATH_INFO'].replace('/', '').title())
+        sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(environ['PATH_INFO']), 'echo'])
+        if sp == 0:
+            response_body = 'ok'
+        else:
+            response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
     else:
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/></head><body>¡¿login!?</body></html>'''
+        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
         ctype = 'text/html; charset=UTF-8'
 
     # always It's OK, okeeeya!?
