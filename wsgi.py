@@ -12,12 +12,13 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_REPO_DIR'] + 'xml')
     files.remove('.gitkeep')
     shows = getpls(None).programas.keys()
+    
+    print('**************\npath{}\ntermina{}\nsplit-1{}\nshows{}***************'.format(environ['PATH_INFO'], environ['PATH_INFO'].endswith('.pls'), environ['PATH_INFO'].split('/')[-1].replace('.pls', ''), shows))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
-
     if environ['PATH_INFO'] == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_REPO_DIR'] + 'xml/' + f).st_mtime))) for f in files]
         response_body.append('''<tr><td style="text-align:center;padding-top:25px;"><button onclick="go('/daily');">Daily</button></td><td></td><td style="text-align:center;padding-top:25px;"><button onclick="go('/hourly');">Hourly</button></td></tr></table></center><script type="text/javascript">function changetext(text){over=document.querySelector("#over");document.querySelector("#result").textContent=text;over.style.display="block";setTimeout(function(){over.style.display="none";location.reload();},2e3);}function go(cual){var xmlhttp=new XMLHttpRequest();xmlhttp.open("GET",cual);xmlhttp.onreadystatechange=function(){if(xmlhttp.readyState==4&&xmlhttp.status==200)   {changetext(xmlhttp.responseText);}else{changetext(xmlhttp.statusText+" "+xmlhttp.status);}};xmlhttp.send(null);}</script></body></html>''')
@@ -35,8 +36,7 @@ def application(environ, start_response):
         response_body = r.read()
         r.close()
         ctype = 'application/xml; charset=UTF-8'
-    print('**************\npath{}\ntermina{}\nsplit-1{}\nshows{}***************'.format(environ['PATH_INFO'], environ['PATH_INFO'].endswith('.pls'), environ['PATH_INFO'].split('/')[-1], shows))
-    elif environ['PATH_INFO'].endswith('.pls') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in shows:
+    elif environ['PATH_INFO'].endswith('.pls') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1].replace('.pls','') in shows:
         response_body = getpls(environ['PATH_INFO'].split('/')[-1].replace('.pls','')).joinedpls
         ctype = 'audio/x-scpls'
     elif environ['PATH_INFO'] == '/daily' or environ['PATH_INFO'] == '/hourly' and ItsMe is True:
