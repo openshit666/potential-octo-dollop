@@ -11,9 +11,7 @@ def application(environ, start_response):
     response_body = None
     files = os.listdir(os.environ['OPENSHIFT_REPO_DIR'] + 'xml')
     files.remove('.gitkeep')
-    shows = getpls(None).programas.keys()
-
-    print('**************\npath{}\ntermina{}\nsplit-1{}\nshows{}***************'.format(environ['PATH_INFO'], environ['PATH_INFO'].endswith('.pls'), environ['PATH_INFO'].split('/')[-1].replace('.pls', ''), shows))
+    shows = getpls(None).allpro
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])

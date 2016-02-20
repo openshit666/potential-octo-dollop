@@ -6,11 +6,12 @@ import urllib.request
 class getpls:
     def __init__(self, show):
         self.programas = {'wdm': {'radio': 'Los40', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/483.xml'}, 'nano': {'radio': 'LaMáxima', 'feed': 'http://www.radioasturias.com/rss_audios.asp?emisora=Maxima+FM+Asturias&programa=Bien+Bailao'}, 'carl': {'radio': 'LaMáxima', 'feed': 'http://www.radioasturias.com/rss_audios.asp?emisora=Maxima+FM+Asturias&programa=Global+Carl+Cox'}, 'armin': {'radio': 'LaMáxima', 'feed': 'http://www.radioasturias.com/rss_audios.asp?emisora=Maxima+FM+Asturias&programa=F%C3%B3rmula+M%C3%A1xima'}, 'insessions': {'radio': 'LaMáxima', 'feed': 'http://www.radioasturias.com/rss_audios.asp?emisora=Maxima+FM+Asturias&programa=In+Sessions'}, 'insomnia': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236303/podcast.xml'}, 'climax': {'radio': 'LaMáxima', 'feed': 'http://www.radioasturias.com/rss_audios.asp?emisora=Maxima+FM+Asturias&programa=Cl%C3%ADmax+Chill+Out'}, 'chillout': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236321/podcast.xml'}, 'europa': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236312/podcast.xml'}, 'brian': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/256645/podcast.xml'}, 'atodojazz': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1875'.format(choice(range(1, 45)))}, 'jazzporquesi': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1999'.format(choice(range(1, 58)))}}
-        if show == '--Random':
+        self.allpro = list(self.programas.keys()) + ['random', 'randomdance', 'randomjazz']
+        if show == 'random':
             self.show = choice(list(self.programas.keys()))
-        elif show == '--RandomJazz':
+        elif show == 'randomjazz':
             self.show = choice(['jazzporquesi', 'atodojazz'])
-        elif show == '--RandomDance':
+        elif show == 'randomdance':
             x = [k for k in list(self.programas.keys()) if k != 'jazzporquesi' and k != 'atodojazz']
             self.show = choice(x)
         elif show in self.programas.keys():
