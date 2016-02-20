@@ -34,7 +34,7 @@ if regexplast != hoy:
         p.string = strftime('%a, %d %h %Y %H:%m:%S +0200', localtime())
     with open(pathrepo + 'xml/lostoros.xml', "wb") as f:
         f.write(soup.renderContents())
-    with open(pathrepo + 'scripts/lostoros.txt', "r+") as w:
+    with open(pathrepo + 'xml/lostoros.txt', "r+") as w:
         d = int(w.read())
         w.seek(0)
         w.write(str(d + 10))

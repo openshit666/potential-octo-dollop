@@ -1,3 +1,5 @@
 #!/bin/bash
 
 ln -sf ${OPENSHIFT_DATA_DIR}/xml/* ${OPENSHIFT_REPO_DIR}/xml/
+t=$(date +"%-W")
+if [[ $(date +"%w") -gt  1 ]]; then echo $[${t}+1]1 > ${OPENSHIFT_REPO_DIR}/xml/lostoros.xml; else echo ${t}1 > ${OPENSHIFT_REPO_DIR}/xml/lostoros.xml; fi
