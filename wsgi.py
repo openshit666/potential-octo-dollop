@@ -10,7 +10,6 @@ def application(environ, start_response):
     ItsMe = False
     response_body = None
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
-    files.remove('.gitkeep')
     shows = getpls(None).allpro
 
     if 'HTTP_COOKIE' in environ:
