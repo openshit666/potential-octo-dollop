@@ -13,9 +13,9 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: DVDR :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog+'scripts.log')
+                    filename=pathlog + 'scripts.log')
 
-soup = BeautifulSoup(open(pathrepo+'xml/dvdr-_-movies.xml'))
+soup = BeautifulSoup(open(pathrepo + 'xml/dvdr-_-movies.xml'))
 L_titulos = soup.find_all('title')
 L_titulos = [L_titulos[i].string for i in range(1, len(L_titulos))]
 L_enlaces = soup.find_all('link')
@@ -59,7 +59,7 @@ if W_titulos[0] != L_titulos[0]:
 
         items=rss_items)
     try:
-        with open(pathrepo+'xml/dvdr-_-movies.xml', 'w') as outfile:
+        with open(pathrepo + 'xml/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
         logging.info('RSS update ... [OK]')
 

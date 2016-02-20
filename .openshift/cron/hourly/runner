@@ -7,8 +7,9 @@ if [[ $(($hora % 2)) -eq 0 ]]; then
     echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
 fi
 
-dia=$(date +%a)
-if [[ $dia == "lun" && $hora -eq 00 ]] || [[ $dia == "lun" && $hora -eq 01 ]]; then
+dia=$(date +"%-W%w")
+next=$(cat ${OPENSHIFT_REPO_DIR}scripts/lostoros.txt)
+if [[ $dia -ge $next ]]; then
     echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
     python ${OPENSHIFT_REPO_DIR}scripts/lostoros.py;
     echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;

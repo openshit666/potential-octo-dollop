@@ -34,6 +34,11 @@ if regexplast != hoy:
         p.string = strftime('%a, %d %h %Y %H:%m:%S +0200', localtime())
     with open(pathrepo + 'xml/lostoros.xml', "wb") as f:
         f.write(soup.renderContents())
-        logging.info('RSS update ... [OK]')
+    with open(pathrepo + 'scripts/lostoros.txt', "r+") as w:
+        d = int(w.read())
+        w.seek(0)
+        w.write(str(d + 10))
+        w.truncate()
+    logging.info('RSS update ... [OK]')
 else:
     logging.info('No hace falta actualizar!')

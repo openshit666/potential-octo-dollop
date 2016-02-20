@@ -1,6 +1,5 @@
 from json import loads, dumps
 from bs4 import BeautifulSoup
-from time import sleep
 import urllib.request
 import logging
 import os
@@ -28,7 +27,7 @@ def checkdb(canciones, dbcanciones):
         if c not in dbcanciones['canciones']:
             dbcanciones['canciones'].append(c)
             todb = True
-            count+=1
+            count += 1
     return todb
 
 
@@ -37,7 +36,7 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: RADIOS :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog+'scripts.log')
+                    filename=pathlog + 'scripts.log')
 
 radios = ['MAXIMAFM', 'M80RADIO']
 for radio in radios:

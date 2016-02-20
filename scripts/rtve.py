@@ -12,11 +12,11 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: RTVE :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog+'scripts.log')
+                    filename=pathlog + 'scripts.log')
 
 error = False
 
-soup = BeautifulSoup(open(pathrepo+'xml/rtve-_-docs.xml'))
+soup = BeautifulSoup(open(pathrepo + 'xml/rtve-_-docs.xml'))
 
 L_titulos = soup.find_all('title')
 L_titulos = [L_titulos[i].string for i in range(1, len(L_titulos))]
@@ -45,7 +45,7 @@ if W_titulos[0] != L_titulos[0]:
         pass
 
     for i in range(len(W_enlaces)):
-        urlapi = 'http://www.descargavideos.tv/?web='+W_enlaces[i]
+        urlapi = 'http://www.descargavideos.tv/?web=' + W_enlaces[i]
         reque = urllib.request.Request(urlapi)
         reque.add_header('User-Agent', 'Mozilla/5.0')
         f = urllib.request.urlopen(reque)
@@ -89,7 +89,7 @@ if W_titulos[0] != L_titulos[0]:
 
         items=rss_items)
     try:
-        with open(pathrepo+'xml/rtve-_-docs.xml', 'w') as outfile:
+        with open(pathrepo + 'xml/rtve-_-docs.xml', 'w') as outfile:
             rss.write_xml(outfile)
         logging.info('RSS update ... [OK]')
 
