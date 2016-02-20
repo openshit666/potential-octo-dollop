@@ -1,6 +1,6 @@
 #! /bin/bash
 
-hora=$(date +%H)
+hora=$(date +"%-H")
 if [[ $(($hora % 2)) -eq 0 ]]; then
     echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
     python ${OPENSHIFT_REPO_DIR}scripts/radios.py;
