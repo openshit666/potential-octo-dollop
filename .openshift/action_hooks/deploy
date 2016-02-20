@@ -8,3 +8,4 @@ if [[ $(date +"%w") -gt  1 ]];
     else
         echo "$(date +"%-W")1" > ${OPENSHIFT_DATA_DIR}/xml/lostoros.txt;
 fi
+mv ${OPENSHIFT_DATA_DIR}/xml/lostoros.txt ${OPENSHIFT_REPO_DIR}/xml/lostoros.txt
