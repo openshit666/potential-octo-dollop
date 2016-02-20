@@ -37,7 +37,7 @@ def application(environ, start_response):
         ctype = 'application/xml; charset=UTF-8'
 #    elif environ['PATH_INFO'].endswith('.pls') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in shows:
     elif environ['PATH_INFO'] == '/wdm.pls':
-        print(environ['PATH_INFO'].split('/')[-1].replace('.pls'))
+        print(environ['PATH_INFO'].split('/')[-1].replace('.pls',''))
         response_body = getpls('wdm').joinedpls
         ctype = 'audio/x-scpls'
     elif environ['PATH_INFO'] == '/daily' or environ['PATH_INFO'] == '/hourly' and ItsMe is True:
