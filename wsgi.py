@@ -45,6 +45,10 @@ def application(environ, start_response):
         else:
             response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
+    elif environ['PATH_INFO'] == '/env':
+        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
+        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
+        response_body = '\n'.join(response_body)
     else:
         response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
         ctype = 'text/html; charset=UTF-8'
