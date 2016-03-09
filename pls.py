@@ -48,7 +48,7 @@ class getpls:
             audio = [audios[-2].get_text(), audios[-1].get_text()]
         else:
             audio = [audios[0].get_text()]
-        self.joinedpls = '[playlist]\n{}\nTitle1={}\nNumberOfEntries={}'.format('\n'.join(['file{}={}'.format(i + 1, audio[i]) for i in range(len(audio))]), self.show, len(audio))
+        self.joinedpls = '[playlist]\n{}\nTitle{}={}\nNumberOfEntries={}\nVersion=2'.format('\n'.join(['file{}={}'.format(i + 1, audio[i]) for i in range(len(audio))]), len(audio), self.show, len(audio))
 
     def get_last_rne(self):
         url = self.programas[self.show]['feed']
