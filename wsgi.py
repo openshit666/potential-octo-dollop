@@ -28,11 +28,11 @@ def application(environ, start_response):
         r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[environ['PATH_INFO'].split('.')[-1]]
-    elif environ['PATH_INFO'] == '/xml/lostoros.xml':
-        r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/lostoros.xml', 'r')
-        response_body = r.read()
-        r.close()
-        ctype = 'application/xml; charset=UTF-8'
+#    elif environ['PATH_INFO'] == '/xml/lostoros.xml':
+#        r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/lostoros.xml', 'r')
+#        response_body = r.read()
+#        r.close()
+#        ctype = 'application/xml; charset=UTF-8'
     elif environ['PATH_INFO'].endswith('.pls') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1].replace('.pls', '') in shows:
         response_body = getpls(environ['PATH_INFO'].split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
@@ -49,7 +49,7 @@ def application(environ, start_response):
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
 #        response_body = '\n'.join(response_body)
     else:
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
+        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"||e.keyCode=="13"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
         ctype = 'text/html; charset=UTF-8'
 
     # always It's OK, okeeeya!?
