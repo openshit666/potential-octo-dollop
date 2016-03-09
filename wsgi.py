@@ -46,11 +46,11 @@ def application(environ, start_response):
         else:
             response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif environ['PATH_INFO'] == '/env.pls':
-        ctype = 'text/plain'
-        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
-        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
-        response_body = '\n'.join(response_body)
+#    elif environ['PATH_INFO'] == '/env.pls':
+#        ctype = 'text/plain'
+#        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
+#        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
+#        response_body = '\n'.join(response_body)
     else:
         start_response('302 Found', [('Location', '/')])
         return ['1']
