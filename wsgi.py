@@ -3,7 +3,6 @@ from subprocess import check_call as cc
 from http.cookies import SimpleCookie
 from time import localtime, strftime
 from pls import getpls
-import cgi
 import os
 
 
@@ -13,7 +12,8 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
-    print(cgi.FieldStorage(environ=environ, fp=environ['wsgi.input']))
+    l = int(environ.get('CONTENT_LENGTH', '0'))
+    print(environ['wsgi.input'].read(l))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
