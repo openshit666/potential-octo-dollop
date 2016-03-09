@@ -12,6 +12,10 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
+    
+    asd = ['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key.startswith('HTTP_')]
+    print('\n'.join(asd))
+    
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -26,7 +30,7 @@ def application(environ, start_response):
     elif path == '/login' and ItsMe is False:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            if environ['wsgi.input'].read(length) == b'session=ItsMe':
+            if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme':
                 cookie = SimpleCookie()
                 cookie['session'] = 'ItsMe'
                 cookie['session']['path'] = "/"
@@ -38,7 +42,7 @@ def application(environ, start_response):
             else:
                 raise Exception
         except:
-            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"></form></center></body></html>'''
+            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
             ctype = 'text/html; charset=UTF-8'
     elif path.startswith('/xml/') and path.split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + path.split('/')[-1], 'r')
@@ -61,7 +65,7 @@ def application(environ, start_response):
         else:
             response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/env.pls':
+    elif path == '/env':
         ctype = 'text/plain'
         response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
         response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))

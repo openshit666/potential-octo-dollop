@@ -48,7 +48,7 @@ class getpls:
             audio = [audios[-2].get_text(), audios[-1].get_text()]
         else:
             audio = [audios[0].get_text()]
-        self.joinedpls = '[playlist]\nNumberOfEntries={}\n{}\nTitle1={}'.format(len(audio), '\n'.join(['file{}={}'.format(i + 1, audio[i]) for i in range(len(audio))]), self.show)
+        self.joinedpls = '[playlist]\n{}\nTitle1={}\nNumberOfEntries={}\nVersion=2'.format(len(audio), '\n'.join(['File{}={}'.format(audio[i]) for i in range(len(audio))]), self.show, i + 1)
 
     def get_last_rne(self):
         url = self.programas[self.show]['feed']
@@ -58,4 +58,4 @@ class getpls:
         soup = BeautifulSoup(f.read().decode(), "html.parser")
         audios = [a.get('href').replace('.lvlt.', '1.akcdn.') for a in soup.find_all(class_='download')]
         r = choice(range(len(audios)))
-        self.joinedpls = '[playlist]\nNumberOfEntries=1\nfile1={}\nTitle1={}'.format(audios[r], self.show)
+        self.joinedpls = '[playlist]\nFile1={}\nTitle1={}\nNumberOfEntries=1\nVersion=2'.format(audios[r], self.show)
