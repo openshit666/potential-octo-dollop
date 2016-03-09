@@ -52,7 +52,7 @@ def application(environ, start_response):
         response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
         response_body = '\n'.join(response_body)
     else:
-        start_response('302 Found', [('Location', 'http://pi-ton.rhcloud.com')])
+        start_response('302 Found', [('Location', '/')])
         return ['1']
 
 
