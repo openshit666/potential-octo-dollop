@@ -13,6 +13,9 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
 
+    asd = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
+    print('\n'.join(asd))
+    
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
