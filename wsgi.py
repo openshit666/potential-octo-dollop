@@ -53,7 +53,7 @@ def application(environ, start_response):
 #        response_body = '\n'.join(response_body)
     else:
         start_response('302 Found', [('Location', '/')])
-        return
+        return ['1']
 
 
     # always It's OK, okeeeya!?
