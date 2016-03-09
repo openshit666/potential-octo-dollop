@@ -13,7 +13,7 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
     
-    asd = ['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key.startswith('HTTP_')]
+    asd = ['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key.startswith('HTTP_') or key.startswith('WWW')]
     print('\n'.join(asd))
     
 
