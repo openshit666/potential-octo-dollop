@@ -12,10 +12,6 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
-    
-    asd = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
-    print('\n'.join(asd))
-    
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -66,10 +62,17 @@ def application(environ, start_response):
             response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
     elif path == '/env':
-        ctype = 'text/plain'
-        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
-        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
-        response_body = '\n'.join(response_body)
+#        ctype = 'text/plain'
+#        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
+#        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
+#        response_body = '\n'.join(response_body)
+        body = 'Please authenticate'
+        headers = [
+            ('content-type', 'text/plain'),
+            ('content-length', str(len(body))),
+            ('WWW-Authenticate', 'Basic realm="asd"')]
+        start_response('401 Unauthorized', headers)
+        return [body]
     else:
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
