@@ -3,6 +3,7 @@ from subprocess import check_call as cc
 from http.cookies import SimpleCookie
 from time import localtime, strftime
 from pls import getpls
+import cgi
 import os
 
 
