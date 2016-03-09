@@ -12,7 +12,7 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
-    print(environ['wsgi.input'])
+    print(cgi.FieldStorage(environ=environ, fp=environ['wsgi.input']))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
