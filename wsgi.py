@@ -22,6 +22,9 @@ def application(environ, start_response):
         response_body.insert(0, '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><style>td {padding: 3px;}</style><body><center><div id="over"style="display:none;position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;-moz-opacity:0.8;opacity:.80;filter:alpha(opacity=80);"><p id="result"style="color:red;margin-top:20%;font-weight:bolder;font-size:25px;"></p></div><table style="margin-top:8%;"><th>Archivo</th><th>Tamaño</th><th style="width:150px;text-align: right;">Fecha modif.</th>')
         response_body = ''.join(response_body)
         ctype = 'text/html; charset=UTF-8'
+    elif environ['PATH_INFO'] == '/' and ItsMe is False:
+        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"||e.keyCode=="13"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
+        ctype = 'text/html; charset=UTF-8'
     elif environ['PATH_INFO'].startswith('/xml/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + environ['PATH_INFO'].split('/')[-1], 'r')
         response_body = r.read()
@@ -33,7 +36,7 @@ def application(environ, start_response):
 #        response_body = r.read()
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
-    elif environ['PATH_INFO'].endswith('.pls') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1].replace('.pls', '') in shows:
+    elif environ['PATH_INFO'].endswith('.pls') and environ['PATH_INFO'].startswith('/pls/') and '..' not in environ['PATH_INFO'] and environ['PATH_INFO'].split('/')[-1].replace('.pls', '') in shows:
         response_body = getpls(environ['PATH_INFO'].split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
     elif environ['PATH_INFO'] == '/daily' or environ['PATH_INFO'] == '/hourly' and ItsMe is True:
@@ -49,8 +52,9 @@ def application(environ, start_response):
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
 #        response_body = '\n'.join(response_body)
     else:
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"||e.keyCode=="13"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
-        ctype = 'text/html; charset=UTF-8'
+        start_response('302 Found', [('Location', '/')])
+        return
+
 
     # always It's OK, okeeeya!?
     status = '200 OK'
