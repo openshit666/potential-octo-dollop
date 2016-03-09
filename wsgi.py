@@ -12,8 +12,6 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
-    l = int(environ.get('CONTENT_LENGTH', '0'))
-    print(environ['wsgi.input'].read(l))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -25,9 +23,23 @@ def application(environ, start_response):
         response_body.insert(0, '<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><style>td {padding: 3px;}</style><body><center><div id="over"style="display:none;position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;-moz-opacity:0.8;opacity:.80;filter:alpha(opacity=80);"><p id="result"style="color:red;margin-top:20%;font-weight:bolder;font-size:25px;"></p></div><table style="margin-top:8%;"><th>Archivo</th><th>Tamaño</th><th style="width:150px;text-align: right;">Fecha modif.</th>')
         response_body = ''.join(response_body)
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/' and ItsMe is False:
-        response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><input type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required></center><script type="text/javascript">document.querySelector("input").addEventListener("keypress",function(e){if(e.key=="Enter"||e.keyCode=="13"){document.cookie="session="+document.querySelector("input").value+"; max-age=864000; path=/";location.reload();}});</script></body></html>'''
-        ctype = 'text/html; charset=UTF-8'
+    elif path == '/login' and ItsMe is False:
+        try:
+            length = int(environ['CONTENT_LENGTH'])
+            if environ['wsgi.input'].read(length) == b'session=ItsMe':
+                cookie = SimpleCookie()
+                cookie['session'] = 'ItsMe'
+                cookie['session']['path'] = "/"
+                cookie['session']['max-age'] = '864000'
+                cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
+                response_headers = [cookieheaders, ('Location', '/')]
+                start_response('302 Found', response_headers)
+                return ['1']     
+            else:
+                raise Exception
+        except:
+            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"></form></center></body></html>'''
+            ctype = 'text/html; charset=UTF-8'
     elif path.startswith('/xml/') and path.split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + path.split('/')[-1], 'r')
         response_body = r.read()
@@ -39,7 +51,7 @@ def application(environ, start_response):
 #        response_body = r.read()
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
-    elif path.endswith('.pls') and path.startswith('/pls/') and path.split('/')[-1].replace('.pls', '') in shows:
+    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
         response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
@@ -55,7 +67,10 @@ def application(environ, start_response):
         response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
         response_body = '\n'.join(response_body)
     else:
-        start_response('302 Found', [('Location', '/')])
+        if ItsMe is True:
+            start_response('302 Found', [('Location', '/')])
+        else:
+            start_response('302 Found', [('Location', '/login')])
         return ['1']
 
 
