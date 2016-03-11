@@ -13,9 +13,9 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
-    
+
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
-    
+
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
@@ -42,7 +42,7 @@ def application(environ, start_response):
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
                 response_headers = [cookieheaders, ('Location', '/')]
                 start_response('302 Found', response_headers)
-                return ['1']     
+                return ['1']
             raise Exception
         except:
             response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
@@ -61,10 +61,10 @@ def application(environ, start_response):
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
         if ItsMe is False and auth is False:
             start_response('302 Found', [('Location', '/login')])
-            return ['1']    
+            return ['1']
         response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
-        
+
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
         if sp == 0:
@@ -85,7 +85,7 @@ def application(environ, start_response):
     # always It's OK, okeeeya!?
     status = '200 OK'
 
-    if ctype == 'audio/x-scpls':        
+    if ctype == 'audio/x-scpls':
         response_headers = [('Content-Type', ctype)]
         start_response(status, response_headers)
         return [response_body.encode()]
