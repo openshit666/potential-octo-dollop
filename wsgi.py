@@ -14,12 +14,13 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
     
+    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
+    
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
     if 'HTTP_AUTHORIZATION' in environ:
-        print(environ['HTTP_AUTHORIZATION'])
         if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
             auth = True
 
