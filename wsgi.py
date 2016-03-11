@@ -79,11 +79,11 @@ def application(environ, start_response):
     elif path == '/logout':
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
-        rcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-        response_headers = [cookieheaders, ('Location', '/')]
-        start_response('302 Found', response_headers)
-        return ['1']
+            rcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
+            cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
+            response_headers = [cookieheaders, ('Location', '/')]
+            start_response('302 Found', response_headers)
+            return ['1']
     else:
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
