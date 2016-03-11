@@ -77,13 +77,14 @@ def application(environ, start_response):
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
 #        response_body = '\n'.join(response_body)
     elif path == '/logout':
-        rcookie = SimpleCookie(environ['HTTP_COOKIE'])
-        if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
-            rcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
-            cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-            response_headers = [cookieheaders, ('Location', '/')]
-            start_response('302 Found', response_headers)
-            return ['1']
+        if 'HTTP_COOKIE' in environ:
+            dcookie = SimpleCookie(environ['HTTP_COOKIE'])
+            if 'session' in dcookie and dcookie['session'].value == 'ItsMe':
+                dcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
+                cookieheaders = ('Set-Cookie', dcookie['session'].OutputString())
+                response_headers = [cookieheaders, ('Location', '/login')]
+                start_response('302 Found', response_headers)
+                return ['1']
     else:
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
