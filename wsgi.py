@@ -20,8 +20,9 @@ def application(environ, start_response):
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
-    if 'HTTP_AUTHORIZATION' in environ:
-        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+
+    if 'HTTP_USER_AGENT' in environ:
+        if environ['HTTP_USER_AGENT'] == 'Dalvik/1.4.0 (Linux':
             auth = True
 
     if path == '/' and ItsMe is True:
@@ -58,9 +59,12 @@ def application(environ, start_response):
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
-        if ItsMe is True or auth is True:
-            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+        if ItsMe is False and auth is False:
+            start_response('302 Found', [('Location', '/login')])
+            return ['1']    
+        response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
+        
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
         if sp == 0:
@@ -81,12 +85,7 @@ def application(environ, start_response):
     # always It's OK, okeeeya!?
     status = '200 OK'
 
-    if ctype == 'audio/x-scpls':
-        if auth is False:
-            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
-            response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-            start_response('401 Unauthorized', response_headers)
-            return [response_body.encode('utf8')]
+    if ctype == 'audio/x-scpls':        
         response_headers = [('Content-Type', ctype)]
         start_response(status, response_headers)
         return [response_body.encode()]
