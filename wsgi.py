@@ -19,6 +19,7 @@ def application(environ, start_response):
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
     if 'HTTP_AUTHORIZATION' in environ:
+        print(environ['HTTP_AUTHORIZATION'])
         if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
             auth = True
 
