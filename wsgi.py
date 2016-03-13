@@ -72,10 +72,9 @@ def application(environ, start_response):
         if ItsMe is True:
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
-            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
-            response_headers = [('content-type', 'text/plain'), ('Content-Length', str(len(response_body.encode('utf8'))))]
-            start_response('200 OK', response_headers)
-            return [response_body.encode('utf8')]
+            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
+            start_response('302 Found', [('Location', location)])
+            return ['1']
         elif xiia is True and auth is False:
             body = 'Please authenticate'
             headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
