@@ -103,7 +103,7 @@ def application(environ, start_response):
     # always It's OK, okeeeya!?
     status = '200 OK'
 
-    if ctype == 'audio/x-scpls' and xiia is False:
+    if ctype == 'audio/x-scpls':
         response_headers = [('Content-Type', ctype)]
         start_response(status, response_headers)
         return [response_body.encode()]
