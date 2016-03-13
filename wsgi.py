@@ -8,7 +8,8 @@ import os
 
 def application(environ, start_response):
     ItsMe = False
-#    auth = False
+    xiia = False
+    auth = False
     response_body = None
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
@@ -21,9 +22,12 @@ def application(environ, start_response):
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
 
-#    if 'HTTP_USER_AGENT' in environ:
-#        if environ['HTTP_USER_AGENT'] == 'Dalvik/1.4.0 (Linux':
-#            auth = True
+    if 'HTTP_USER_AGENT' in environ:
+        if environ['HTTP_USER_AGENT'] == 'Dalvik/1.4.0 (Linux':
+            xiia = True
+            if 'HTTP_AUTHORIZATION' in environ:
+                if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+                    auth = True
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -58,8 +62,16 @@ def application(environ, start_response):
 #        response_body = r.read()
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
-    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows and ItsMe is True:
-        response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows and ItsMe is True or xiia is True:
+        if ItsMe is True:
+            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+        elif xiia is True and auth is True:
+            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
+        elif xiia is True and auth is False:
+            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
+            response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+            start_response('401 Unauthorized', response_headers)
+            return [response_body.encode('utf8')]
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
@@ -84,13 +96,14 @@ def application(environ, start_response):
     else:
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
+            return ['1']
         start_response('302 Found', [('Location', '/login')])
         return ['1']
 
     # always It's OK, okeeeya!?
     status = '200 OK'
 
-    if ctype == 'audio/x-scpls':
+    if ctype == 'audio/x-scpls' and xiia is False and auth is False:
         response_headers = [('Content-Type', ctype)]
         start_response(status, response_headers)
         return [response_body.encode()]
