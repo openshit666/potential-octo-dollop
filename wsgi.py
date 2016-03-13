@@ -74,7 +74,7 @@ def application(environ, start_response):
                 response_headers = [('Content-Type', 'audio/x-scpls')]
                 start_response('200 OK', response_headers)
                 print('ayo')
-                print('response_body')
+                print(response_body)
                 return [response_body.encode()]
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
