@@ -93,7 +93,7 @@ def application(environ, start_response):
             return [body]
         else:
             ItsMe = True
-            start_response('302 Found', [('Location', '/wdm.pls')])
+            start_response('302 Found', [('Location', 'pls/wdm.pls')])
             
             
 #        ctype = 'text/plain'
