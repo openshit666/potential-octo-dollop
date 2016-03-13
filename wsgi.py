@@ -70,14 +70,14 @@ def application(environ, start_response):
             return [body]
         elif 'HTTP_AUTHORIZATION' in environ:
             if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-                start_response('302 Found', [('Location', '/pls/random.pls')])
-                return['1']
-#                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
-#                response_headers = [('Content-Type', 'audio/x-scpls')]
-#                start_response('200 OK', response_headers)
-#                print('ayo')
-#                print(response_body)
-#                return [response_body.encode()]
+#                start_response('302 Found', [('Location', '/pls/random.pls')])
+#                return['1']
+                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+                response_headers = [('Content-Type', 'audio/x-scpls')]
+                start_response('200 OK', response_headers)
+                print('ayo')
+                print(response_body)
+                return [response_body.encode()]
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
