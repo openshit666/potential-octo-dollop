@@ -16,16 +16,14 @@ def application(environ, start_response):
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
     if 'HTTP_AUTHORIZATION' in environ:
-        print(environ['HTTP_AUTHORIZATION'])
+        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+            auth = True
+            print('True', environ['HTTP_AUTHORIZATION'])
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
-
-    if 'HTTP_AUTHORIZATION' in environ:
-        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-            auth = True
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -61,9 +59,10 @@ def application(environ, start_response):
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
-        if ItsMe is True or auth is True:
+        if ItsMe is True:
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
-            ctype = 'audio/x-scpls'
+            print('ayo')
+            print(response_body)
         elif 'HTTP_AUTHORIZATION' in environ:
             if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
 #                start_response('302 Found', [('Location', '/pls/random.pls')])
@@ -79,6 +78,7 @@ def application(environ, start_response):
             headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
             start_response('401 Unauthorized', headers)
             return [body]
+        ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
         if sp == 0:
@@ -86,10 +86,19 @@ def application(environ, start_response):
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
     elif path == '/env':
-        body = 'Please authenticate'
-        headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-        start_response('401 Unauthorized', headers)
-        return [body]
+        if auth is False:
+            body = 'Please authenticate'
+            headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+            start_response('401 Unauthorized', headers)
+            return [body]
+        else:
+            response_body = getpls('wdm').joinedpls
+            response_headers = [('Content-Type', 'audio/x-scpls')]
+            start_response('200 OK', response_headers)
+            print('ayo')
+            print(response_body)
+            return [response_body.encode()]
+            
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
