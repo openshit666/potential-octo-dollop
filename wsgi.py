@@ -68,6 +68,9 @@ def application(environ, start_response):
             headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
             start_response('401 Unauthorized', headers)
             return [body]
+        elif 'HTTP_AUTHORIZATION' in environ:
+            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
 
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
