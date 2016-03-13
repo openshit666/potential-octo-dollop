@@ -92,12 +92,9 @@ def application(environ, start_response):
             start_response('401 Unauthorized', headers)
             return [body]
         else:
-            response_body = getpls('wdm').joinedpls
-            response_headers = [('Content-Type', 'audio/x-scpls')]
-            start_response('200 OK', response_headers)
-            print('ayo')
-            print(response_body)
-            return [response_body.encode()]
+            ItsMe = True
+            start_response('302 Found', [('Location', '/wdm.pls')])
+            
             
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
