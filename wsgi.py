@@ -96,10 +96,10 @@ def application(environ, start_response):
 
     if ctype == 'audio/x-scpls':
         if auth is False:
-            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
-            response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-            start_response('401 Unauthorized', response_headers)
-            return [response_body.encode('utf8')]
+            body = 'Please authenticate'
+            headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+            start_response('401 Unauthorized', headers)
+            return [body]
         response_headers = [('Content-Type', ctype)]
         start_response(status, response_headers)
         return [response_body.encode()]
