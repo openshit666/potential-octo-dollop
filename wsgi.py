@@ -60,6 +60,7 @@ def application(environ, start_response):
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
         if ItsMe is True:
+            ctype = 'audio/x-scpls'
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
             print('ayo')
             print(response_body)
