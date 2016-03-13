@@ -68,10 +68,10 @@ def application(environ, start_response):
             headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
             start_response('401 Unauthorized', headers)
             return [body]
-#        elif 'HTTP_AUTHORIZATION' in environ:
-#            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-#                start_response('302 Found', [('Location', '/pls/random.pls')])
-#                return['1']
+        elif 'HTTP_AUTHORIZATION' in environ:
+            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+                start_response('302 Found', [('Location', '/pls/random.pls')])
+                return['1']
 #                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
 #                response_headers = [('Content-Type', 'audio/x-scpls')]
 #                start_response('200 OK', response_headers)
