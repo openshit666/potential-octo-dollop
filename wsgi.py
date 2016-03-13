@@ -23,9 +23,9 @@ def application(environ, start_response):
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
 
-#    if 'HTTP_AUTHORIZATION' in environ:
-#        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-#            auth = True
+    if 'HTTP_AUTHORIZATION' in environ:
+        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+            auth = True
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -68,10 +68,10 @@ def application(environ, start_response):
             headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
             start_response('401 Unauthorized', headers)
             return [body]
-        elif 'HTTP_AUTHORIZATION' in environ:
-            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-                start_response('302 Found', [('Location', '/pls/random.pls')])
-                return['1']
+#        elif 'HTTP_AUTHORIZATION' in environ:
+#            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+#                start_response('302 Found', [('Location', '/pls/random.pls')])
+#                return['1']
 #                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
 #                response_headers = [('Content-Type', 'audio/x-scpls')]
 #                start_response('200 OK', response_headers)
