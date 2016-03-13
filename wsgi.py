@@ -15,7 +15,8 @@ def application(environ, start_response):
     shows = getpls(None).allpro
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
-    print(environ['HTTP_AUTHORIZATION'])
+    if 'HTTP_AUTHORIZATION' in environ:
+        print(environ['HTTP_AUTHORIZATION'])
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
