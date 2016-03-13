@@ -80,6 +80,7 @@ def application(environ, start_response):
         body = 'Please authenticate'
         headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
         start_response('401 Unauthorized', headers)
+        return [body]
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
