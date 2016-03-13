@@ -84,13 +84,10 @@ def application(environ, start_response):
                 response_headers = [('Content-Type', 'audio/x-scpls')]
                 start_response(status, response_headers)
                 return [response_body.encode()]
-    body = 'Please authenticate'
-    headers = [
-        ('content-type', 'text/plain'),
-        ('content-length', str(len(body))),
-        ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-    start_response('401 Unauthorized', headers)
-    return [body]
+        body = 'Please authenticate'
+        headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+        start_response('401 Unauthorized', headers)
+        return [body]
     elif path == '/logout':
         if 'HTTP_COOKIE' in environ:
             dcookie = SimpleCookie(environ['HTTP_COOKIE'])
