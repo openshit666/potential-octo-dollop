@@ -78,11 +78,11 @@ def application(environ, start_response):
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
 #        response_body = '\n'.join(response_body)
-    if 'HTTP_AUTHORIZATION' in environ:
-        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cXdlOnF3ZQ==':
-            response_body = '[playlist]\nNumberOfEntries=1\nFile1=http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3'
-            response_headers = [('Content-Type', 'audio/x-scpls')]
-            start_response(status, response_headers)
+        if 'HTTP_AUTHORIZATION' in environ:
+            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cXdlOnF3ZQ==':
+                response_body = '[playlist]\nNumberOfEntries=1\nFile1=http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3'
+                response_headers = [('Content-Type', 'audio/x-scpls')]
+                start_response(status, response_headers)
                 return [response_body.encode()]
     body = 'Please authenticate'
     headers = [
