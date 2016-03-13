@@ -71,7 +71,7 @@ def application(environ, start_response):
             response_body = 'ok'
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/env':
+#    elif path == '/env':
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
