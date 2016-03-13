@@ -75,7 +75,7 @@ def application(environ, start_response):
             return [body]
         else:
             ItsMe = True
-            start_response('302 Found', [('Location', 'pls/wdm.pls')])
+            start_response('302 Found', [('Location', 'http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3')])
             return ['1']
             
             
