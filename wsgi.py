@@ -74,9 +74,9 @@ def application(environ, start_response):
             start_response('401 Unauthorized', headers)
             return [body]
         else:
-            ItsMe = True
-            start_response('302 Found', [('Location', 'http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3')])
-            return ['1']
+            response_headers = [('Content-Type', 'audio/x-scpls')]
+            start_response('200 OK', response_headers)
+            return [b'''[playlist]\nNumberOfEntries=1\nFile1=http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3''']
             
             
 #        ctype = 'text/plain'
