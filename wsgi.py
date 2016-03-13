@@ -70,6 +70,7 @@ def application(environ, start_response):
             return [body]
         elif 'HTTP_AUTHORIZATION' in environ:
             if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+                print('ayo')
                 response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
 
