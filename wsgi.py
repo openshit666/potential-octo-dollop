@@ -59,26 +59,7 @@ def application(environ, start_response):
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
-        if ItsMe is True:
-            ctype = 'audio/x-scpls'
-            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
-            print('ayo')
-            print(response_body)
-        elif 'HTTP_AUTHORIZATION' in environ:
-            if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-#                start_response('302 Found', [('Location', '/pls/random.pls')])
-#                return['1']
-                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
-                response_headers = [('Content-Type', 'audio/x-scpls')]
-                start_response('200 OK', response_headers)
-                print('ayo')
-                print(response_body)
-                return [response_body.encode()]
-        else:
-            body = 'Please authenticate'
-            headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-            start_response('401 Unauthorized', headers)
-            return [body]
+        response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
