@@ -15,8 +15,8 @@ def application(environ, start_response):
     shows = getpls(None).allpro
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
-#    if 'HTTP_AUTHORIZATION' in environ:
-#        print(environ['HTTP_AUTHORIZATION'])
+    if 'HTTP_AUTHORIZATION' in environ:
+        print(environ['HTTP_AUTHORIZATION'])
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -82,7 +82,7 @@ def application(environ, start_response):
             if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cXdlOnF3ZQ==':
                 response_body = '[playlist]\nNumberOfEntries=1\nFile1=http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3'
                 response_headers = [('Content-Type', 'audio/x-scpls')]
-                start_response(status, response_headers)
+                start_response('200 OK', response_headers)
                 return [response_body.encode()]
         body = 'Please authenticate'
         headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
