@@ -8,22 +8,22 @@ import os
 
 def application(environ, start_response):
     ItsMe = False
-    auth = False
+#    auth = False
     response_body = None
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
-    if 'HTTP_AUTHORIZATION' in environ:
-        if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
-            auth = True
-            print('True', environ['HTTP_AUTHORIZATION'])
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
+
+#    if 'HTTP_USER_AGENT' in environ:
+#        if environ['HTTP_USER_AGENT'] == 'Dalvik/1.4.0 (Linux':
+#            auth = True
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -58,7 +58,7 @@ def application(environ, start_response):
 #        response_body = r.read()
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
-    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
+    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows and ItsMe is True:
         response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
@@ -67,18 +67,7 @@ def application(environ, start_response):
             response_body = 'ok'
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/env':
-        if auth is False:
-            body = 'Please authenticate'
-            headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-            start_response('401 Unauthorized', headers)
-            return [body]
-        else:
-            response_headers = [('Content-Type', 'audio/x-scpls')]
-            start_response('200 OK', response_headers)
-            return [b'''[playlist]\nNumberOfEntries=1\nFile1=http://mvod1.akcdn.rtve.es/resources/TE_SATODO/mp3/8/4/1248009455448.mp3''']
-            
-            
+#    elif path == '/env':
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
