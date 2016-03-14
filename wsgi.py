@@ -26,7 +26,7 @@ def application(environ, start_response):
             ItsMe = True
 
     if 'HTTP_USER_AGENT' in environ:
-        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT']:
+        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT'] or 'Lavf/56.15.102' in environ['HTTP_USER_AGENT']:
             xiia = True
             if 'HTTP_AUTHORIZATION' in environ:
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
