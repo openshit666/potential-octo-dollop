@@ -70,7 +70,8 @@ def application(environ, start_response):
             ctype = 'audio/x-scpls'
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
-            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
+            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('File1=', '')
+            print(location)
             start_response('302 Found', [('Location', location)])
             return ['1']
         elif xiia is True and auth is False:
@@ -94,7 +95,8 @@ def application(environ, start_response):
             start_response('200 OK', response_headers)
             return [response_body.encode()]
         elif xiia is True and auth is True:
-            location = getpls('armin').joinedpls.split('\n')[1].replace('file1=', '')
+            location = getpls('armin').joinedpls.split('\n')[1].replace('File1=', '')
+            print(location)
             start_response('302 Found', [('Location', location)])
             return ['1']
         elif xiia is True and auth is False:
