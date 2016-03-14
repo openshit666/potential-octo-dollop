@@ -75,14 +75,14 @@ def application(environ, start_response):
                 start_response('302 Found', [('Location', location)])
                 return ['1']
             else:
-                response_body = 'Please authenticate'
-                response_headers = [('content-type', 'text/plain'), ('content-length', str(len(response_body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+#                response_body = 'Please authenticate'
+#                response_headers = [('content-type', 'text/plain'), ('content-length', str(len(response_body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+#                start_response('401 Unauthorized', response_headers)
+#                return [response_body]
+                response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
+                response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
                 start_response('401 Unauthorized', response_headers)
-                return [response_body]
-#            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
-#            response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-#            start_response('401 Unauthorized', response_headers)
-#            return [response_body.encode('utf8')]
+                return [response_body.encode('utf8')]
         else:
             start_response('302 Found', [('Location', '/login')])
             return ['1']
