@@ -100,7 +100,7 @@ def application(environ, start_response):
             start_response('200 OK', response_headers)
             return [response_body.encode()]
         elif xiia is True and auth is True:
-            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
+            location = getpls('random').joinedpls.split('\n')[1].replace('file1=', '')
             start_response('302 Found', [('Location', location)])
             return ['1']
         elif xiia is True and auth is False:
