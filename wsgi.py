@@ -69,6 +69,7 @@ def application(environ, start_response):
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
+        print('ayo')
         if ItsMe is True:
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
