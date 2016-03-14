@@ -68,7 +68,7 @@ def application(environ, start_response):
 #        response_body = r.read()
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
-    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows and ItsMe is True or xiia is True:
+    elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
         if ItsMe is True:
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
@@ -80,6 +80,9 @@ def application(environ, start_response):
             response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
             start_response('401 Unauthorized', response_headers)
             return [response_body.encode('utf8')]
+        else:
+            start_response('302 Found', [('Location', '/login')])
+            return ['1']
         ctype = 'audio/x-scpls'
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
