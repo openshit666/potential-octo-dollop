@@ -69,7 +69,6 @@ def application(environ, start_response):
 #        r.close()
 #        ctype = 'application/xml; charset=UTF-8'
     elif path.startswith('/pls/') and path.endswith('.pls') and path.split('/')[-1].replace('.pls', '') in shows:
-        print('ayo')
         if ItsMe is True:
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
@@ -91,7 +90,7 @@ def application(environ, start_response):
             response_body = 'ok'
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == 'pls/asd.pls':
+    elif path == '/pls/asd.pls':
         if ItsMe is True or auth is True:
             response_body = getpls('random').joinedpls
             response_headers = [('Content-Type', 'audio/x-scpls')]
