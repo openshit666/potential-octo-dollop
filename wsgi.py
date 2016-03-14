@@ -17,23 +17,17 @@ def application(environ, start_response):
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
 
-    if 'HTTP_AUTHORIZATION' in environ:
-        print(environ['HTTP_AUTHORIZATION'])
-
-
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
 
     if 'HTTP_USER_AGENT' in environ:
-        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT'] or 'Lavf/56.15.102' in environ['HTTP_USER_AGENT']:
+        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT']:
             xiia = True
-            print('xiia: True')
             if 'HTTP_AUTHORIZATION' in environ:
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
                     auth = True
-                    print('auth: True')
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -91,6 +85,7 @@ def application(environ, start_response):
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
 #    elif path == '/env':
+##        response_body = '\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())])
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
 #        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
