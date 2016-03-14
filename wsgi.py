@@ -25,6 +25,7 @@ def application(environ, start_response):
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
             ItsMe = True
 
+#    if 'HTTP_USER_AGENT' in environ or 'Lavf/56.15.102' in environ['HTTP_USER_AGENT']:
     if 'HTTP_USER_AGENT' in environ:
         if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT']:
             xiia = True
