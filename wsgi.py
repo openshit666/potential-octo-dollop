@@ -89,7 +89,10 @@ def application(environ, start_response):
         ctype = 'text/html; charset=UTF-8'
     elif path == 'pls/asd.pls':
         if ItsMe is True or auth is True:
-            response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+            response_body = getpls('random').joinedpls
+            response_headers = [('Content-Type', 'audio/x-scpls')]
+            start_response('200 OK', response_headers)
+            return [response_body.encode()]
 #        elif xiia is True and auth is True:
 #            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
 #            start_response('302 Found', [('Location', location)])
