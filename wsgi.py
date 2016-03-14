@@ -90,21 +90,6 @@ def application(environ, start_response):
             response_body = 'ok'
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/pls/asd.pls':
-        if ItsMe is True or auth is True:
-            response_body = getpls('random').joinedpls
-            response_headers = [('Content-Type', 'audio/x-scpls')]
-            start_response('200 OK', response_headers)
-            return [response_body.encode()]
-#        elif xiia is True and auth is True:
-#            location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
-#            start_response('302 Found', [('Location', location)])
-#            return ['1']
-        elif xiia is True and auth is False:
-            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
-            response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-            start_response('401 Unauthorized', response_headers)
-            return [response_body.encode('utf8')]
 #    elif path == '/env':
 #        ctype = 'text/plain'
 #        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
