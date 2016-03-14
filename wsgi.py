@@ -16,8 +16,6 @@ def application(environ, start_response):
     shows = getpls(None).allpro
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
-    if 'HTTP_AUTHORIZATION' in environ:
-        print(environ['HTTP_AUTHORIZATION'])
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -25,7 +23,7 @@ def application(environ, start_response):
             ItsMe = True
 
     if 'HTTP_USER_AGENT' in environ:
-        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT'] or 'Lavf/56.15.102' in environ['HTTP_USER_AGENT']:
+        if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT']:
             xiia = True
             if 'HTTP_AUTHORIZATION' in environ:
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
@@ -75,10 +73,6 @@ def application(environ, start_response):
                 start_response('302 Found', [('Location', location)])
                 return ['1']
             else:
-#                response_body = 'Please authenticate'
-#                response_headers = [('content-type', 'text/plain'), ('content-length', str(len(response_body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
-#                start_response('401 Unauthorized', response_headers)
-#                return [response_body]
                 response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
                 response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
                 start_response('401 Unauthorized', response_headers)
