@@ -16,6 +16,9 @@ def application(environ, start_response):
     shows = getpls(None).allpro
 
 #    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
+    if 'HTTP_AUTHORIZATION' in environ:
+        print(environ['HTTP_AUTHORIZATION'])
+
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -25,9 +28,12 @@ def application(environ, start_response):
     if 'HTTP_USER_AGENT' in environ:
         if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT']:
             xiia = True
+            print('xiia: True')
+
             if 'HTTP_AUTHORIZATION' in environ:
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
                     auth = True
+                    print('auth: True')
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -67,6 +73,7 @@ def application(environ, start_response):
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True and auth is True:
             location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('file1=', '')
+            print(location)
             start_response('302 Found', [('Location', location)])
             return ['1']
         elif xiia is True and auth is False:
@@ -75,6 +82,7 @@ def application(environ, start_response):
             start_response('401 Unauthorized', response_headers)
             return [response_body.encode('utf8')]
         else:
+            print('ayo')
             start_response('302 Found', [('Location', '/login')])
             return ['1']
         ctype = 'audio/x-scpls'
