@@ -19,7 +19,6 @@ def application(environ, start_response):
     if 'HTTP_AUTHORIZATION' in environ:
         print(environ['HTTP_AUTHORIZATION'])
 
-
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
@@ -70,14 +69,14 @@ def application(environ, start_response):
             ctype = 'audio/x-scpls'
             response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
         elif xiia is True:
-            if auth is True
+            if auth is True:
                 location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('File1=', '')
                 print(location)
                 start_response('302 Found', [('Location', location)])
                 return ['1']
             else:
                 response_body = 'Please authenticate'
-                response_headers = [('content-type', 'text/plain'), ('content-length', str(len(body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
+                response_headers = [('content-type', 'text/plain'), ('content-length', str(len(response_body))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
                 start_response('401 Unauthorized', response_headers)
                 return [response_body]
 #            response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
