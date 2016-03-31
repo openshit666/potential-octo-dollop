@@ -81,17 +81,17 @@ def application(environ, start_response):
             start_response('302 Found', [('Location', '/login')])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
-        sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path), 'echo'])
+        sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
         if sp == 0:
             response_body = 'ok'
         response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
-    elif path == '/env':
+#    elif path == '/env':
 #        response_body = '\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())])
-        ctype = 'text/plain'
-        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
-        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
-        response_body = '\n'.join(response_body)
+#        ctype = 'text/plain'
+#        response_body = ['%s: %s' % (key, value) for key, value in sorted(environ.items())]
+#        response_body.append('SCRIPT_NAME: {}'.format(environ['SCRIPT_NAME']))
+#        response_body = '\n'.join(response_body)
     elif path == '/logout':
         if 'HTTP_COOKIE' in environ:
             dcookie = SimpleCookie(environ['HTTP_COOKIE'])
