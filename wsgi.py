@@ -82,10 +82,9 @@ def application(environ, start_response):
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
-        print(sp)
+        response_body = 'fail'
         if sp == 0:
             response_body = 'ok'
-        response_body = 'fail'
         ctype = 'text/html; charset=UTF-8'
 #    elif path == '/env':
 #        response_body = '\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())])
