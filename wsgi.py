@@ -28,6 +28,11 @@ def application(environ, start_response):
             if 'HTTP_AUTHORIZATION' in environ:
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
                     auth = True
+        elif 'LibVL' in environ['HTTP_USER_AGENT']:
+            xiia = True
+            if 'HTTP_AUTHORIZATION' in environ:
+                if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
+                    vlc = True
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -72,6 +77,10 @@ def application(environ, start_response):
                 print(location)
                 start_response('302 Found', [('Location', location)])
                 return ['1']
+            elif vlc is True:
+                response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
+                start_response('200 OK', [('Content-Type', 'audio/x-scpls')])
+                return [response_body.encode()]
             else:
                 response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action="/login"method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
                 response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]

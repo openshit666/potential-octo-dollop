@@ -42,6 +42,8 @@ class getpls:
         elif self.show == 'armin':
             ttaa = [(d.find_previous_siblings('title')[0].get_text().replace('Fórmula Máxima', 'A State of Trance'), d.find_next_siblings('guid')[0].get_text()) for d in soup.find_all('description') if 'domingo' in d.get_text() and '22:00' in d.get_text() or 'domingo' in d.get_text() and '23:00' in d.get_text()]
             audio = [ttaa[-2][1], ttaa[-1][1]]
+        elif self.show == 'climax':
+            audio = [audios[-2].get_text().replace('05-00', '02-00').replace('04-00', '01-00'), audios[-1].get_text().replace('05-00', '02-00').replace('04-00', '01-00')]
         elif self.show == 'wdm':
             audio = [audios[1].get_text(), audios[0].get_text()]
         elif radio == 'LaMáxima':
