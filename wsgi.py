@@ -10,6 +10,7 @@ def application(environ, start_response):
     ItsMe = False
     xiia = False
     auth = False
+    vlc = False
     response_body = None
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
