@@ -18,7 +18,7 @@ def application(environ, start_response):
     shows = getpls(None).allpro
     redirect = None
 
-    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO' or key == 'QUERY_STRING']))
+    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO' or key == 'QUERY_STRING'] or key == 'wsgi.input'))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -38,7 +38,7 @@ def application(environ, start_response):
                     vlc = True
 
     if 'QUERY_STRING' in environ:
-        if environ['QUERY_STRING'].startswith('?redirect='):
+        if environ['QUERY_STRING'].startswith('redirect='):
             redirect = os.path.normpath(environ['QUERY_STRING'])
 
     if path == '/' and ItsMe is True:
@@ -58,7 +58,7 @@ def application(environ, start_response):
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
                 if redirect is None:
                     response_headers = [cookieheaders, ('Location', '/')]
-                response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['?redirect']))]
+                response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['redirect']))]
                 start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
@@ -139,7 +139,7 @@ def application(environ, start_response):
         if ItsMe is True:
             if redirect is None:
                 start_response('302 Found', [('Location', '/')])
-            start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['?redirect']))])
+            start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['redirect']))])
             return ['1']
         start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
         return ['1']
