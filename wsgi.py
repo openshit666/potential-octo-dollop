@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from subprocess import check_call as cc
 from http.cookies import SimpleCookie
-from urllib.parse import urlparse
+from urllib.parse import parse_qs
 from time import localtime, strftime
 from pls import getpls
 import os
@@ -39,7 +39,7 @@ def application(environ, start_response):
 
     if 'QUERY_STRING' in environ:
         if environ['QUERY_STRING'].startswith('?redirect='):
-            redirect = environ['QUERY_STRING']
+            redirect = os.path.normpath(environ['QUERY_STRING'])
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -59,7 +59,7 @@ def application(environ, start_response):
                 if redirect is None:
                     response_headers = [cookieheaders, ('Location', '/')]
                 else:
-                    response_headers = [cookieheaders, ('Location', '/')]
+                    response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['?redirect']))]
                 start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
