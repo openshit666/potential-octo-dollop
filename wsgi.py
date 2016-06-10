@@ -66,7 +66,7 @@ def application(environ, start_response):
             response_body = 'ok'
         except:
             r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'r')
-            response_body = r.read()
+            response_body = ''.join(list(reversed(r.readlines())))
             r.close()
         ctype = 'text/plain; charset=UTF-8'
     elif path.startswith('/xml/') and path.split('/')[-1] in files and ItsMe is True:
