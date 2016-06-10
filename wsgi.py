@@ -16,7 +16,7 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
 
-#    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
+    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key.startswith('HTTP')]))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -51,7 +51,7 @@ def application(environ, start_response):
                 cookie['session']['max-age'] = '864000'
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
                 response_headers = [cookieheaders, ('Location', '/')]
-                start_response('303 Found', response_headers)
+                start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
         except:
@@ -104,7 +104,7 @@ def application(environ, start_response):
                 start_response('401 Unauthorized', response_headers)
                 return [response_body.encode('utf8')]
         else:
-            start_response('303 Found', [('Location', '/login')])
+            start_response('302 Found', [('Location', '/login')])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
@@ -129,9 +129,9 @@ def application(environ, start_response):
                 return ['1']
     else:
         if ItsMe is True:
-            start_response('303 Found', [('Location', '/')])
+            start_response('302 Found', [('Location', '/')])
             return ['1']
-        start_response('303 Found', [('Location', '/login')])
+        start_response('302 Found', [('Location', '/login')])
         return ['1']
 
     # always It's OK, okeeeya!?
