@@ -68,7 +68,7 @@ def application(environ, start_response):
             r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'r')
             response_body = r.read()
             r.close()
-        ctype = 'text/html; charset=UTF-8'
+        ctype = 'text/plain; charset=UTF-8'
     elif path.startswith('/xml/') and path.split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + path.split('/')[-1], 'r')
         response_body = r.read()
@@ -111,7 +111,7 @@ def application(environ, start_response):
         response_body = 'fail'
         if sp == 0:
             response_body = 'ok'
-        ctype = 'text/html; charset=UTF-8'
+        ctype = 'text/plain; charset=UTF-8'
 #    elif path == '/env':
 #        response_body = '\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())])
 #        ctype = 'text/plain'
