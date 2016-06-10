@@ -16,7 +16,7 @@ def application(environ, start_response):
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
 
-    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key.startswith('HTTP')]))
+    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items())]))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -131,7 +131,7 @@ def application(environ, start_response):
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
             return ['1']
-        start_response('302 Found', [('Location', '/login')])
+        start_response('302 Found', [('Location', '/login'), ('Referer', 'http://pi-ton.rhcloud.com{}'.format(path))])
         return ['1']
 
     # always It's OK, okeeeya!?
