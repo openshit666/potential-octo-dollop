@@ -60,8 +60,8 @@ def application(environ, start_response):
     elif path == '/report' and ItsMe is True:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'w')
-            w.write(environ['wsgi.input'].read(length).decode())
+            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'a')
+            w.write(environ['wsgi.input'].read(length).decode() + '\n')
             w.close()
             response_body = 'ok'
         except:
@@ -76,8 +76,10 @@ def application(environ, start_response):
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[path.split('.')[-1]]
     elif path == '/xml/lostoros.xml':
-        start_response('404 Not Found', [('content-type', 'text/html')])
-        return ['1']
+        response_body = '''<!DOCTYPE html><html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>404 Not Found</h1></center></body></html>'''
+        response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8'))))]
+        start_response('404 Not Found', response_headers)
+        return [response_body.encode('utf8')]
 #    elif path == '/xml/lostoros.xml':
 #        r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/lostoros.xml', 'r')
 #        response_body = r.read()
