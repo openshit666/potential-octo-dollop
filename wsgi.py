@@ -113,7 +113,7 @@ def application(environ, start_response):
                 start_response('401 Unauthorized', response_headers)
                 return [response_body.encode('utf8')]
         else:
-            start_response('302 Found', [('Location', '/login')])
+            start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
@@ -140,7 +140,7 @@ def application(environ, start_response):
         if ItsMe is True:
             start_response('302 Found', [('Location', '/')])
             return ['1']
-        start_response('302 Found', [('Location', '/login')])
+        start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
         return ['1']
 
     # always It's OK, okeeeya!?
