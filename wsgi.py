@@ -57,12 +57,27 @@ def application(environ, start_response):
         except:
             response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
             ctype = 'text/html; charset=UTF-8'
+    elif path == '/report' and ItsMe is True:
+        try:
+            length = int(environ['CONTENT_LENGTH'])
+            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'w')
+            w.write(environ['wsgi.input'].read(length).decode())
+            w.close()
+            response_body = 'ok'
+        except:
+            r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'r')
+            response_body = r.read()
+            r.close()
+        ctype = 'text/html; charset=UTF-8'
     elif path.startswith('/xml/') and path.split('/')[-1] in files and ItsMe is True:
         r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + path.split('/')[-1], 'r')
         response_body = r.read()
         r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[path.split('.')[-1]]
+    elif path == '/xml/lostoros.xml':
+        start_response('404 Not Found', [('content-type', 'text/html')])
+        return ['1']
 #    elif path == '/xml/lostoros.xml':
 #        r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/lostoros.xml', 'r')
 #        response_body = r.read()
@@ -75,7 +90,6 @@ def application(environ, start_response):
         elif xiia is True:
             if auth is True:
                 location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('File1=', '')
-                print(location)
                 start_response('302 Found', [('Location', location)])
                 return ['1']
             elif vlc is True:
