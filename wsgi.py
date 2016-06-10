@@ -58,8 +58,7 @@ def application(environ, start_response):
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
                 if redirect is None:
                     response_headers = [cookieheaders, ('Location', '/')]
-                else:
-                    response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['?redirect']))]
+                response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['?redirect']))]
                 start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
@@ -138,7 +137,9 @@ def application(environ, start_response):
                 return ['1']
     else:
         if ItsMe is True:
-            start_response('302 Found', [('Location', '/')])
+            if redirect is None:
+                start_response('302 Found', [('Location', '/')])
+            start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['?redirect']))])
             return ['1']
         start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
         return ['1']
