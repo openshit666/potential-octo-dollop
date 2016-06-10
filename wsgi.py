@@ -18,7 +18,7 @@ def application(environ, start_response):
     shows = getpls(None).allpro
     redirect = None
 
-    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO' or key == 'QUERY_STRING'] or key == 'wsgi.input'))
+#    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO' or key == 'QUERY_STRING' or key == 'wsgi.input']))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -112,6 +112,8 @@ def application(environ, start_response):
                 start_response('401 Unauthorized', response_headers)
                 return [response_body.encode('utf8')]
         else:
+            if redirect is None:
+                start_response('302 Found', [('Location', '/')])
             start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
