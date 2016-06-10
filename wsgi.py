@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from subprocess import check_call as cc
 from http.cookies import SimpleCookie
+from urllib.parse import urlparse
 from time import localtime, strftime
 from pls import getpls
 import os
@@ -15,8 +16,9 @@ def application(environ, start_response):
     path = os.path.normpath(environ['PATH_INFO'])
     files = os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml')
     shows = getpls(None).allpro
+    redirect = None
 
-    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO']))
+    print('\n'.join(['%s: %s' % (key, value) for key, value in sorted(environ.items()) if key == 'HTTP_REFERER' or key == 'REQUEST_URI' or key == 'PATH_INFO' or key == 'QUERY_STRING']))
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
@@ -35,6 +37,10 @@ def application(environ, start_response):
                 if environ['HTTP_AUTHORIZATION'].split(' ')[-1] == 'cGktdG9uOmVsY2Fsb3JldA==':
                     vlc = True
 
+    if 'QUERY_STRING' in environ:
+        if environ['QUERY_STRING'].startswith('?redirect='):
+            redirect = environ['QUERY_STRING']
+
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
         response_body.append('''<tr><td style="text-align:center;padding-top:25px;"><button onclick="go('/daily');">Daily</button></td><td></td><td style="text-align:center;padding-top:25px;"><button onclick="go('/hourly');">Hourly</button></td></tr></table></center><script type="text/javascript">function changetext(text){over=document.querySelector("#over");document.querySelector("#result").textContent=text;over.style.display="block";setTimeout(function(){over.style.display="none";location.reload();},2e3);}function go(cual){var xmlhttp=new XMLHttpRequest();xmlhttp.open("GET",cual);xmlhttp.onreadystatechange=function(){if(xmlhttp.readyState==4&&xmlhttp.status==200)   {changetext(xmlhttp.responseText);}else{changetext(xmlhttp.statusText+" "+xmlhttp.status);}};xmlhttp.send(null);}</script></body></html>''')
@@ -50,8 +56,11 @@ def application(environ, start_response):
                 cookie['session']['path'] = "/"
                 cookie['session']['max-age'] = '864000'
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-                response_headers = [cookieheaders, ('Location', '/')]
-                start_response('301 Found', response_headers)
+                if redirect is None:
+                    response_headers = [cookieheaders, ('Location', '/')]
+                else:
+                    response_headers = [cookieheaders, ('Location', '/')]
+                start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
         except:
@@ -60,12 +69,12 @@ def application(environ, start_response):
     elif path == '/report' and ItsMe is True:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'a')
+            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log', 'a')
             w.write(environ['wsgi.input'].read(length).decode() + '\n')
             w.close()
             response_body = 'ok'
         except:
-            r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log' , 'r')
+            r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log', 'r')
             response_body = ''.join(list(reversed(r.readlines())))
             r.close()
         ctype = 'text/plain; charset=UTF-8'
@@ -92,7 +101,7 @@ def application(environ, start_response):
         elif xiia is True:
             if auth is True:
                 location = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls.split('\n')[1].replace('File1=', '')
-                start_response('301 Found', [('Location', location)])
+                start_response('302 Found', [('Location', location)])
                 return ['1']
             elif vlc is True:
                 response_body = getpls(path.split('/')[-1].replace('.pls', '')).joinedpls
@@ -104,7 +113,7 @@ def application(environ, start_response):
                 start_response('401 Unauthorized', response_headers)
                 return [response_body.encode('utf8')]
         else:
-            start_response('301 Found', [('Location', '/login')])
+            start_response('302 Found', [('Location', '/login')])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
@@ -125,13 +134,13 @@ def application(environ, start_response):
                 dcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
                 cookieheaders = ('Set-Cookie', dcookie['session'].OutputString())
                 response_headers = [cookieheaders, ('Location', '/login')]
-                start_response('301 Found', response_headers)
+                start_response('302 Found', response_headers)
                 return ['1']
     else:
         if ItsMe is True:
-            start_response('301 Found', [('Location', '/')])
+            start_response('302 Found', [('Location', '/')])
             return ['1']
-        start_response('301 Found', [('Location', '/login')])
+        start_response('302 Found', [('Location', '/login')])
         return ['1']
 
     # always It's OK, okeeeya!?
