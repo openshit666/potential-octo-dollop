@@ -14,7 +14,7 @@ def application(environ, start_response):
     vlc = False
     response_body = None
     path = os.path.normpath(environ['PATH_INFO'])
-    files = sorted(os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml'), key=str.lower)
+    files = sorted(os.listdir(os.environ['OPENSHIFT_DATA_DIR'] + 'xml'), key=lambda x: (x.split('.')[-1], x.lower()))
     shows = getpls(None).allpro
     redirect = None
 
@@ -43,7 +43,6 @@ def application(environ, start_response):
             print(redirect)
             print('{}'.format(parse_qs(redirect)['redirect'][0]))
             print('/login?redirect={}'.format(path))
-            
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files if not f.startswith('.')]
