@@ -89,7 +89,7 @@ def application(environ, start_response):
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[path.split('.')[-1]]
     elif path == '/xml/lostoros.xml':
-        response_body = '''<!DOCTYPE html><html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>404 Not Found</h1></center></body></html>'''
+        response_body = '''<!DOCTYPE html><html><head><title>404 Not Found</title></head><body bgcolor="white"><h1>404 Not Found</h1><p>The URL you requested could not be found.</p><hr><address>Apache/2.2.15 (Red Hat) Server at pi-ton.rhcloud.com Port 80</address></body></html>'''
         response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8'))))]
         start_response('404 Not Found', response_headers)
         return [response_body.encode('utf8')]
