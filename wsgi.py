@@ -40,6 +40,10 @@ def application(environ, start_response):
     if 'QUERY_STRING' in environ:
         if environ['QUERY_STRING'].startswith('redirect='):
             redirect = os.path.normpath(environ['QUERY_STRING'])
+            print(redirect)
+            print('{}'.format(parse_qs(redirect)['redirect'][0]))
+            print('/login?redirect={}'.format(path))
+            
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files]
@@ -56,7 +60,7 @@ def application(environ, start_response):
                 cookie['session']['path'] = "/"
                 cookie['session']['max-age'] = '864000'
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-                if redirect is None:
+                if redirect is None or redirect == '/':
                     response_headers = [cookieheaders, ('Location', '/')]
                 else:
                     response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))]
@@ -146,7 +150,10 @@ def application(environ, start_response):
             else:
                 start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))])
             return ['1']
-        start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
+        if path == '/':
+            start_response('302 Found', [('Location', '/login'.format(path))])
+        else:
+            start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
         return ['1']
 
     # always It's OK, okeeeya!?
