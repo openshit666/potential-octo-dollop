@@ -58,7 +58,8 @@ def application(environ, start_response):
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
                 if redirect is None:
                     response_headers = [cookieheaders, ('Location', '/')]
-                response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))]
+                else:
+                    response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))]
                 start_response('302 Found', response_headers)
                 return ['1']
             raise Exception
@@ -114,7 +115,8 @@ def application(environ, start_response):
         else:
             if redirect is None:
                 start_response('302 Found', [('Location', '/')])
-            start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
+            else:
+                start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
             return ['1']
     elif path == '/daily' or path == '/hourly' and ItsMe is True:
         sp = cc(['sh', './app-root/repo/.openshift/cron/{}/runner'.format(path.replace('/', '')), 'echo'])
@@ -141,7 +143,8 @@ def application(environ, start_response):
         if ItsMe is True:
             if redirect is None:
                 start_response('302 Found', [('Location', '/')])
-            start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))])
+            else:
+                start_response('302 Found', [('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))])
             return ['1']
         start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
         return ['1']
