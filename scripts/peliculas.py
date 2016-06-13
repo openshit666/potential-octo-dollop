@@ -13,7 +13,7 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: DVDR :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog + 'scripts.log')
+                    filename=pathlog + 'report.log')
 
 soup = BeautifulSoup(open(pathrepo + 'xml/dvdr-_-movies.xml'))
 L_titulos = soup.find_all('title')
@@ -38,7 +38,7 @@ if W_titulos[0] != L_titulos[0]:
     del W_titulos[e:]
     del W_enlaces[e:]
     for t in W_titulos:
-        logging.debug('%s ... [OK]', t)
+        #logging.debug('%s ... [OK]', t)
     W_titulos.extend(L_titulos)
     W_enlaces.extend(L_enlaces)
     titulos = W_titulos
@@ -61,10 +61,10 @@ if W_titulos[0] != L_titulos[0]:
     try:
         with open(pathrepo + 'xml/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
-        logging.info('RSS update ... [OK]')
+        #logging.info('RSS update ... [OK]')
 
     except:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
 
 elif W_titulos[0] == L_titulos[0]:
-    logging.info('No hace falta actualizar!')
+    #logging.info('No hace falta actualizar!')

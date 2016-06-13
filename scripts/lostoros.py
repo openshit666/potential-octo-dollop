@@ -11,7 +11,7 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: LosToros :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog + 'scripts.log')
+                    filename=pathlog + 'report.log')
 
 soup = BeautifulSoup(open(pathrepo + 'xml/lostoros.xml'))
 guids = soup.find_all('guid')

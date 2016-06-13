@@ -72,12 +72,12 @@ def application(environ, start_response):
     elif path == '/report' and ItsMe is True:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log', 'a')
+            w = open(os.environ['OPENSHIFT_LOG_DIR'] + 'report.log', 'a')
             w.write(environ['wsgi.input'].read(length).decode() + '\n')
             w.close()
             response_body = 'ok'
         except:
-            r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'win7.log', 'r')
+            r = open(os.environ['OPENSHIFT_LOG_DIR'] + 'report.log', 'r')
             response_body = ''.join(list(reversed(r.readlines())))
             r.close()
         ctype = 'text/plain; charset=UTF-8'

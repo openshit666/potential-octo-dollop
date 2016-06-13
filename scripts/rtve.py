@@ -12,7 +12,7 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: RTVE :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog + 'scripts.log')
+                    filename=pathlog + 'report.log')
 
 error = False
 
@@ -58,7 +58,7 @@ if W_titulos[0] != L_titulos[0]:
             else:
                 url_video = link
                 W_descarga.append(url_video)
-                logging.debug('%s ... [OK]', W_titulos[i])
+                #logging.debug('%s ... [OK]', W_titulos[i])
         except:
             error = True
             error_res = datasoup.find('div', 'error_res').string
@@ -91,10 +91,10 @@ if W_titulos[0] != L_titulos[0]:
     try:
         with open(pathrepo + 'xml/rtve-_-docs.xml', 'w') as outfile:
             rss.write_xml(outfile)
-        logging.info('RSS update ... [OK]')
+        #logging.info('RSS update ... [OK]')
 
     except:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
 
 elif W_titulos[0] == L_titulos[0]:
-    logging.info('No hace falta actualizar!')
+    #logging.info('No hace falta actualizar!')

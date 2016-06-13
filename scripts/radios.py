@@ -36,7 +36,7 @@ pathrepo = os.environ['OPENSHIFT_REPO_DIR']
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: RADIOS :: %(levelname)s :: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=pathlog + 'scripts.log')
+                    filename=pathlog + 'report.log')
 
 radios = ['MAXIMAFM', 'M80RADIO']
 for radio in radios:
@@ -50,7 +50,7 @@ for radio in radios:
             with open(pathrepo + 'xml/{}.json'.format(radio), 'w') as w:
                 w.write(dumps(dbcanciones, separators=(',', ':'), ensure_ascii=False))
             logging.info('{}DB update +{} ... [OK]'.format(radio, count))
-        else:
-            logging.info('No hace falta actualizar!')
+        #else:
+            #logging.info('No hace falta actualizar!')
     else:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')

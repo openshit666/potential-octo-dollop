@@ -1,7 +1,7 @@
 #! /bin/bash
 
-curl --silent "http://googleweblight.com/?lite_url=http://pi-ton.rhcloud.com/&f=1" > /dev/null;
-echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+#curl --silent "http://googleweblight.com/?lite_url=http://pi-ton.rhcloud.com/&f=1" > /dev/null;
+#echo "*************//*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
 python ${OPENSHIFT_REPO_DIR}scripts/peliculas.py;
 python ${OPENSHIFT_REPO_DIR}scripts/rtve.py;
-echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
+#echo "*************\\\*************" >> ${OPENSHIFT_LOG_DIR}scripts.log;
