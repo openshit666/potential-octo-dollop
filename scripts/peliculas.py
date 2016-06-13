@@ -37,8 +37,8 @@ if W_titulos[0] != L_titulos[0]:
     e = W_titulos.index(L_titulos[0])
     del W_titulos[e:]
     del W_enlaces[e:]
-    for t in W_titulos:
-        #logging.debug('%s ... [OK]', t)
+#    for t in W_titulos:
+#        logging.debug('%s ... [OK]', t)
     W_titulos.extend(L_titulos)
     W_enlaces.extend(L_enlaces)
     titulos = W_titulos
@@ -61,10 +61,10 @@ if W_titulos[0] != L_titulos[0]:
     try:
         with open(pathrepo + 'xml/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
-        #logging.info('RSS update ... [OK]')
+#            logging.info('RSS update ... [OK]')
 
     except:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
 
-elif W_titulos[0] == L_titulos[0]:
-    #logging.info('No hace falta actualizar!')
+#elif W_titulos[0] == L_titulos[0]:
+#    logging.info('No hace falta actualizar!')

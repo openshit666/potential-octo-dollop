@@ -39,6 +39,6 @@ if regexplast != hoy:
         w.seek(0)
         w.write(str(d + 10))
         w.truncate()
-    logging.info('RSS update ... [OK]')
-else:
-    logging.info('No hace falta actualizar!')
+#    logging.info('RSS update ... [OK]')
+#else:
+#    logging.info('No hace falta actualizar!')
