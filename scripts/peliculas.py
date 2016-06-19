@@ -61,7 +61,7 @@ if W_titulos[0] != L_titulos[0]:
     try:
         with open(pathrepo + 'xml/dvdr-_-movies.xml', 'w') as outfile:
             rss.write_xml(outfile)
-#            logging.info('RSS update ... [OK]')
+            logging.info('RSS update ... [OK]')
 
     except:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
