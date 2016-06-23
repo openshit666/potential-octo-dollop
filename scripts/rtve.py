@@ -58,7 +58,7 @@ if W_titulos[0] != L_titulos[0]:
             else:
                 url_video = link
                 W_descarga.append(url_video)
-#                logging.debug('%s ... [OK]', W_titulos[i])
+                logging.debug('%s ... [OK]', W_titulos[i])
         except:
             error = True
             error_res = datasoup.find('div', 'error_res').string
@@ -96,5 +96,5 @@ if W_titulos[0] != L_titulos[0]:
     except:
         logging.error('404 Not found. ¡You shall not pass! Algo ha petao premoh')
 
-#elif W_titulos[0] == L_titulos[0]:
-#    logging.info('No hace falta actualizar!')
+elif W_titulos[0] == L_titulos[0]:
+    logging.info('No hace falta actualizar!')
