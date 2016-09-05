@@ -56,17 +56,14 @@ def application(environ, start_response):
     elif path == '/login' and ItsMe is False:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            print(environ['wsgi.input'].read(length))
-            if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme' or environ['wsgi.input'].read(length) == b'session=malonso':
+            pwd = environ['wsgi.input'].read(length).decode().replace('session=', '')
+            if pwd == 'ItsMe' or pwd == 'itsme' or pwd == 'malonso':
                 cookie = SimpleCookie()
-                print(environ['wsgi.input'].read(length))
-                print(environ['wsgi.input'].read(length).decode())
-                print(environ['wsgi.input'].read(length).decode().replace('session=', ''))
-                cookie['session'] = environ['wsgi.input'].read(length).decode().replace('session=', '')
-                cookie['session']['path'] = "/"
+                cookie['session'] = pwd
+                cookie['session']['path'] = '/'
                 cookie['session']['max-age'] = '864000'
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-                if environ['wsgi.input'].read(length) == b'session=malonso':
+                if pwd == 'malonso':
                     response_headers = [cookieheaders, ('Location', '/nextgp')]
                 elif redirect is None or redirect == '/':
                     response_headers = [cookieheaders, ('Location', '/')]
