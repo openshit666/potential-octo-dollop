@@ -56,6 +56,7 @@ def application(environ, start_response):
     elif path == '/login' and ItsMe is False:
         try:
             length = int(environ['CONTENT_LENGTH'])
+            print(environ['wsgi.input'].read(length))
             if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme' or environ['wsgi.input'].read(length) == b'session=malonso':
                 cookie = SimpleCookie()
                 print(environ['wsgi.input'].read(length))
