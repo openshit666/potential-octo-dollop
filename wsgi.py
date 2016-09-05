@@ -43,9 +43,6 @@ def application(environ, start_response):
     if 'QUERY_STRING' in environ:
         if environ['QUERY_STRING'].startswith('redirect='):
             redirect = os.path.normpath(environ['QUERY_STRING'])
-            print(redirect)
-            print('{}'.format(parse_qs(redirect)['redirect'][0]))
-            print('/login?redirect={}'.format(path))
 
     if path == '/' and ItsMe is True:
         response_body = ['<tr><td style="text-align:left;"><a href="/xml/{}" download>{}</a></td><td style="text-align:right;">{} kB</td><td style="text-align:right;">{}</td></tr>'.format(f, f, round(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_size / 1024, 1), strftime('%-d/%m at %H:%M', localtime(os.stat(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/' + f).st_mtime))) for f in files if not f.startswith('.')]
