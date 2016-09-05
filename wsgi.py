@@ -75,7 +75,7 @@ def application(environ, start_response):
             response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
             ctype = 'text/html; charset=UTF-8'
     elif path == '/nextgp' and ItsMe is True:
-        response_body = mcal.text
+        response_body = mcal().nextgptext
         ctype = 'text/plain; charset=UTF-8'
     elif path == '/report' and ItsMe is True:
         try:
