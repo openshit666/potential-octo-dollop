@@ -58,6 +58,9 @@ def application(environ, start_response):
             length = int(environ['CONTENT_LENGTH'])
             if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme' or environ['wsgi.input'].read(length) == b'session=malonso':
                 cookie = SimpleCookie()
+                print(environ['wsgi.input'].read(length))
+                print(environ['wsgi.input'].read(length).decode())
+                print(environ['wsgi.input'].read(length).decode().replace('session=', ''))
                 cookie['session'] = environ['wsgi.input'].read(length).decode().replace('session=', '')
                 cookie['session']['path'] = "/"
                 cookie['session']['max-age'] = '864000'
