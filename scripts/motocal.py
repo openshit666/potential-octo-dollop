@@ -12,7 +12,7 @@ class mcal:
     def __init__(self):
         locale.setlocale(locale.LC_TIME, '')
         pathrepo = os.environ['OPENSHIFT_REPO_DIR']
-        with open('{}motocal.json'.format(pathrepo), 'r') as r:
+        with open('xml/{}motocal.json'.format(pathrepo), 'r') as r:
             motocal = loads(r.read())
 
         fin_motogp = (datetime.now() - timedelta(hours=1)).strftime('%Y%m%d%H%M%S')
