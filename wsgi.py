@@ -3,7 +3,8 @@ from subprocess import check_call as cc
 from http.cookies import SimpleCookie
 from urllib.parse import parse_qs
 from time import localtime, strftime
-from pls import getpls
+from scripts.pls import getpls
+from scripts.motocal import mcal
 import os
 
 
@@ -22,7 +23,9 @@ def application(environ, start_response):
 
     if 'HTTP_COOKIE' in environ:
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
-        if 'session' in rcookie and rcookie['session'].value == 'ItsMe':
+        if 'session' in rcookie and rcookie['session'].value == 'ItsMe' or rcookie['session'].value == 'itsme':
+            ItsMe = True
+        elif 'session' in rcookie and rcookie['session'].value == 'malonso' and path == '/nextgp':
             ItsMe = True
 
     if 'HTTP_USER_AGENT' in environ:
@@ -53,13 +56,15 @@ def application(environ, start_response):
     elif path == '/login' and ItsMe is False:
         try:
             length = int(environ['CONTENT_LENGTH'])
-            if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme':
+            if environ['wsgi.input'].read(length) == b'session=ItsMe' or environ['wsgi.input'].read(length) == b'session=itsme' or environ['wsgi.input'].read(length) == b'session=malonso':
                 cookie = SimpleCookie()
-                cookie['session'] = 'ItsMe'
+                cookie['session'] = environ['wsgi.input'].read(length).decode()
                 cookie['session']['path'] = "/"
                 cookie['session']['max-age'] = '864000'
                 cookieheaders = ('Set-Cookie', cookie['session'].OutputString())
-                if redirect is None or redirect == '/':
+                if environ['wsgi.input'].read(length) == b'session=malonso':
+                    response_headers = [cookieheaders, ('Location', '/nextgp')]
+                elif redirect is None or redirect == '/':
                     response_headers = [cookieheaders, ('Location', '/')]
                 else:
                     response_headers = [cookieheaders, ('Location', '{}'.format(parse_qs(redirect)['redirect'][0]))]
@@ -69,6 +74,9 @@ def application(environ, start_response):
         except:
             response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
             ctype = 'text/html; charset=UTF-8'
+    elif path == '/nextgp' and ItsMe is True:
+        response_body = mcal.text
+        ctype = 'text/plain; charset=UTF-8'
     elif path == '/report' and ItsMe is True:
         try:
             length = int(environ['CONTENT_LENGTH'])
@@ -136,7 +144,7 @@ def application(environ, start_response):
     elif path == '/logout':
         if 'HTTP_COOKIE' in environ:
             dcookie = SimpleCookie(environ['HTTP_COOKIE'])
-            if 'session' in dcookie and dcookie['session'].value == 'ItsMe':
+            if 'session' in dcookie and dcookie['session'].value == 'ItsMe' or dcookie['session'].value == 'itsme' or dcookie['session'].value == 'malonso':
                 dcookie['session']['expires'] = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
                 cookieheaders = ('Set-Cookie', dcookie['session'].OutputString())
                 response_headers = [cookieheaders, ('Location', '/login')]
