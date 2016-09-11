@@ -52,7 +52,7 @@ def get_avs(cual, modo):
     for q in qavs:
         qavs[q] = sorted(set(qavs[q]))
     for r in ravs:
-        ravs[q] = sorted(set(ravs[q]))
+        ravs[r] = sorted(set(ravs[r]))
     if modo == 'qualy':
         lavs = [val for subl in sorted(list(qavs.values())) for val in subl]
         for key, val in sorted(qavs.items(), key=lambda k: k[1][1]):
