@@ -20,11 +20,25 @@ class mcal:
         fin_f1 = (now - timedelta(hours=2)).strftime('%Y%m%d%H%M%S')
         nextmotogp = [f for f in sorted(list(motocal['motogp'].keys())) if int(fin_motogp) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(f, motocal['motogp'][f]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S'))][0]
         nextf1gp = [f for f in sorted(list(motocal['f1'].keys())) if int(fin_f1) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(f, motocal['f1'][f]['carrera']['F1']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S'))][0]
+        try:
+            nextnextmotogp = sorted(list(motocal['motogp'].keys()))[sorted(list(motocal['motogp'].keys())).index(nextf1gp) + 1]
+        except:
+            nextnextmotogp = 666
+            pass
+        try:
+            nextnextf1gp = sorted(list(motocal['f1'].keys()))[sorted(list(motocal['f1'].keys())).index(nextf1gp) + 1]
+        except:
+            nextnextf1gp = 666
+            pass
         if int(datetime.strftime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S')) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S')):
             self.nextgptext = '{} #F1\nGP {}, {}\nClasificación: {}\nCarrera: {}\n{}'.format(strftime('%A %-d %B', strptime(nextf1gp, '%Y%m%d')).title(), motocal['f1'][nextf1gp]['gp'], motocal['f1'][nextf1gp]['location'], motocal['f1'][nextf1gp]['clasificacion']['F1'], motocal['f1'][nextf1gp]['carrera']['F1'], goodTime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
+            if 666 < int(nextnextf1gp) <= int(nextmotogp):
+                print('{} {}, {} #F1\n'.format(strftime('%A %-d %B', strptime(nextnextf1gp, '%Y%m%d')).title(), motocal['f1'][nextnextf1gp]['carrera']['F1'], motocal['f1'][nextnextf1gp]['gp']))
             self.nextgptext += '\n\n{} #MotoGP\nGP {}, {}\nClasificación/Carrera:\nMoto3   {}/{}\nMoto2   {}/{}\nMotoGP  {}/{}\n{}'.format(strftime('%A %-d %B', strptime(nextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextmotogp]['gp'], motocal['motogp'][nextmotogp]['location'], motocal['motogp'][nextmotogp]['clasificacion']['Moto3'], motocal['motogp'][nextmotogp]['carrera']['Moto3'], motocal['motogp'][nextmotogp]['clasificacion']['Moto2'], motocal['motogp'][nextmotogp]['carrera']['Moto2'], motocal['motogp'][nextmotogp]['clasificacion']['MotoGP'], motocal['motogp'][nextmotogp]['carrera']['MotoGP'], goodTime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
         else:
             self.nextgptext = '{} #MotoGP\nGP {}, {}\nClasificación/Carrera:\nMoto3   {}/{}\nMoto2   {}/{}\nMotoGP  {}/{}\n{}'.format(strftime('%A %-d %B', strptime(nextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextmotogp]['gp'], motocal['motogp'][nextmotogp]['location'], motocal['motogp'][nextmotogp]['clasificacion']['Moto3'], motocal['motogp'][nextmotogp]['carrera']['Moto3'], motocal['motogp'][nextmotogp]['clasificacion']['Moto2'], motocal['motogp'][nextmotogp]['carrera']['Moto2'], motocal['motogp'][nextmotogp]['clasificacion']['MotoGP'], motocal['motogp'][nextmotogp]['carrera']['MotoGP'], goodTime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
+            if 666 < int(nextnextmotogp) <= int(nextf1gp):
+                print('{} {}, {} #MotoGP\n'.format(strftime('%A %-d %B', strptime(nextnextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextnextmotogp]['carrera']['MotoGP'], motocal['motogp'][nextnextmotogp]['gp']))
             self.nextgptext += '\n\n{} #F1\nGP {}, {}\nClasificación: {}\nCarrera: {}\n{}'.format(strftime('%A %-d %B', strptime(nextf1gp, '%Y%m%d')).title(), motocal['f1'][nextf1gp]['gp'], motocal['f1'][nextf1gp]['location'], motocal['f1'][nextf1gp]['clasificacion']['F1'], motocal['f1'][nextf1gp]['carrera']['F1'], goodTime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
 
 
