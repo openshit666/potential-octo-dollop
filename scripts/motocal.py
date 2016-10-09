@@ -16,30 +16,28 @@ class mcal:
         with open('{}xml/motocal.json'.format(pathrepo), 'r') as r:
             motocal = loads(r.read())
 
-        fin_motogp = (now - timedelta(hours=1)).strftime('%Y%m%d%H%M%S')
-        fin_f1 = (now - timedelta(hours=2)).strftime('%Y%m%d%H%M%S')
-        nextmotogp = [f for f in sorted(list(motocal['motogp'].keys())) if int(fin_motogp) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(f, motocal['motogp'][f]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S'))][0]
-        nextf1gp = [f for f in sorted(list(motocal['f1'].keys())) if int(fin_f1) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(f, motocal['f1'][f]['carrera']['F1']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S'))][0]
-        try:
-            nextnextmotogp = sorted(list(motocal['motogp'].keys()))[sorted(list(motocal['motogp'].keys())).index(nextf1gp) + 1]
-        except:
-            nextnextmotogp = 666
-            pass
-        try:
-            nextnextf1gp = sorted(list(motocal['f1'].keys()))[sorted(list(motocal['f1'].keys())).index(nextf1gp) + 1]
-        except:
-            nextnextf1gp = 666
-            pass
-        if int(datetime.strftime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S')) < int(datetime.strftime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S'), '%Y%m%d%H%M%S')):
-            self.nextgptext = '{} #F1\nGP {}, {}\nClasificación: {}\nCarrera: {}\n{}'.format(strftime('%A %-d %B', strptime(nextf1gp, '%Y%m%d')).title(), motocal['f1'][nextf1gp]['gp'], motocal['f1'][nextf1gp]['location'], motocal['f1'][nextf1gp]['clasificacion']['F1'], motocal['f1'][nextf1gp]['carrera']['F1'], goodTime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
-            if 666 < int(nextnextf1gp) <= int(nextmotogp):
-                self.nextgptext +='\n\n{} {}, {} #F1'.format(strftime('%A %-d %B', strptime(nextnextf1gp, '%Y%m%d')).title(), motocal['f1'][nextnextf1gp]['carrera']['F1'], motocal['f1'][nextnextf1gp]['gp'])
-            self.nextgptext += '\n\n{} #MotoGP\nGP {}, {}\nClasificación/Carrera:\nMoto3   {}/{}\nMoto2   {}/{}\nMotoGP  {}/{}\n{}'.format(strftime('%A %-d %B', strptime(nextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextmotogp]['gp'], motocal['motogp'][nextmotogp]['location'], motocal['motogp'][nextmotogp]['clasificacion']['Moto3'], motocal['motogp'][nextmotogp]['carrera']['Moto3'], motocal['motogp'][nextmotogp]['clasificacion']['Moto2'], motocal['motogp'][nextmotogp]['carrera']['Moto2'], motocal['motogp'][nextmotogp]['clasificacion']['MotoGP'], motocal['motogp'][nextmotogp]['carrera']['MotoGP'], goodTime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
-        else:
-            self.nextgptext = '{} #MotoGP\nGP {}, {}\nClasificación/Carrera:\nMoto3   {}/{}\nMoto2   {}/{}\nMotoGP  {}/{}\n{}'.format(strftime('%A %-d %B', strptime(nextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextmotogp]['gp'], motocal['motogp'][nextmotogp]['location'], motocal['motogp'][nextmotogp]['clasificacion']['Moto3'], motocal['motogp'][nextmotogp]['carrera']['Moto3'], motocal['motogp'][nextmotogp]['clasificacion']['Moto2'], motocal['motogp'][nextmotogp]['carrera']['Moto2'], motocal['motogp'][nextmotogp]['clasificacion']['MotoGP'], motocal['motogp'][nextmotogp]['carrera']['MotoGP'], goodTime(datetime.strptime('{}{}:00'.format(nextmotogp, motocal['motogp'][nextmotogp]['carrera']['MotoGP']), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
-            if 666 < int(nextnextmotogp) <= int(nextf1gp):
-                self.nextgptext +='\n\n{} {}, {} #MotoGP\n'.format(strftime('%A %-d %B', strptime(nextnextmotogp, '%Y%m%d')).title(), motocal['motogp'][nextnextmotogp]['carrera']['MotoGP'], motocal['motogp'][nextnextmotogp]['gp'])
-            self.nextgptext += '\n\n{} #F1\nGP {}, {}\nClasificación: {}\nCarrera: {}\n{}'.format(strftime('%A %-d %B', strptime(nextf1gp, '%Y%m%d')).title(), motocal['f1'][nextf1gp]['gp'], motocal['f1'][nextf1gp]['location'], motocal['f1'][nextf1gp]['clasificacion']['F1'], motocal['f1'][nextf1gp]['carrera']['F1'], goodTime(datetime.strptime('{}{}:00'.format(nextf1gp, motocal['f1'][nextf1gp]['carrera']['F1']), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
+        fin = (now - timedelta(hours=1.5)).strftime('%Y%m%d%H%M%S')
+        gps = [k for k in sorted(motocal.keys()) if int(fin) < int(k)]
+
+        for i in range(len(gps[:4])):
+            nextgp = gps[i]
+            tipo = motocal[nextgp]['tipo']
+            if i > 1:
+                self.nextgptext = '{} {}, {} #{}'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), motocal[nextgp]['carrera'][tipo], motocal[nextgp]['gp'], tipo)
+            else:
+                if 'MotoGP' == tipo:
+                    text = ''
+                    kk = sorted(motocal[nextgp]['clasificacion'].keys())
+                    kk.remove('Moto3')
+                    kk.insert(0, 'Moto3')
+                    for k in kk:
+                        if k == kk[-1]:
+                            text += '{}\t{}/\033[1;95m{}\033[0m\n'.format(k.replace('Moto2', 'Moto3'), motocal[nextgp]['clasificacion'][k], motocal[nextgp]['carrera'][k])
+                        else:
+                            text += '{}\t{}/{}\n'.format(k, motocal[nextgp]['clasificacion'][k], motocal[nextgp]['carrera'][k])
+                    self.nextgptext = '{} #{}\nGP {}, {}\nClasificación/Carrera:\n{}{}\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], text, goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
+                else:
+                    self.nextgptext = '{} #{}\nGP {}, {}\nClasificación:\t{}\nCarrera:\t{}\n{}\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], motocal[nextgp]['clasificacion'][tipo], motocal[nextgp]['carrera'][tipo], goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
 
 
 def get_avs(cual, modo):
@@ -52,7 +50,8 @@ def get_avs(cual, modo):
     req.add_header('User-Agent', 'Mozilla/5.0')
     f = urllib.request.urlopen(req)
     soup = BeautifulSoup(f.read().decode('utf-8'), "html.parser")
-    qualy = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style="width: 188px") if cual.replace('FORMULA 1', 'QUALIFYING').replace('MOTOGP', 'QP') in x.find_next_sibling('td').find_next_sibling('td').get_text()]).split(']')))
+    cualgp = soup.find('td', text=re.compile(cual), style="width: 188px").find_next_sibling('td').get_text()
+    qualy = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style="width: 188px") if cual.replace('FORMULA 1', 'QUALIFYING').replace('MOTOGP', 'QP') in x.find_next_sibling('td').find_next_sibling('td').get_text() and cualgp in x.find_next_sibling('td').get_text()]).split(']')))
     for q in qualy:
         try:
             qavs[q[-3:]] += sorted([int(av) for av in re.findall('(?<!S)\d+', q)])
