@@ -19,11 +19,12 @@ class mcal:
         fin = (now - timedelta(hours=1.5)).strftime('%Y%m%d%H%M%S')
         gps = [k for k in sorted(motocal.keys()) if int(fin) < int(k)]
 
+        self.nextgptext = ''
         for i in range(len(gps[:4])):
             nextgp = gps[i]
             tipo = motocal[nextgp]['tipo']
             if i > 1:
-                self.nextgptext = '{} {}, {} #{}\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), motocal[nextgp]['carrera'][tipo], motocal[nextgp]['gp'], tipo)
+                self.nextgptext += '{} {}, {} #{}\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), motocal[nextgp]['carrera'][tipo], motocal[nextgp]['gp'], tipo)
             else:
                 if 'MotoGP' == tipo:
                     text = ''
@@ -32,12 +33,12 @@ class mcal:
                     kk.insert(0, 'Moto3')
                     for k in kk:
                         if k == kk[-1]:
-                            text += '{}\t{}/\033[1;95m{}\033[0m\n'.format(k.replace('Moto2', 'Moto3'), motocal[nextgp]['clasificacion'][k], motocal[nextgp]['carrera'][k])
+                            text += '{}\t{}/{}\n'.format(k.replace('Moto2', 'Moto3'), motocal[nextgp]['clasificacion'][k], motocal[nextgp]['carrera'][k])
                         else:
                             text += '{}\t{}/{}\n'.format(k, motocal[nextgp]['clasificacion'][k], motocal[nextgp]['carrera'][k])
-                    self.nextgptext = '{} #{}\nGP {}, {}\nClasificación/Carrera:\n{}{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], text, goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
+                    self.nextgptext += '{} #{}\nGP {}, {}\nClasificación/Carrera:\n{}{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], text, goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
                 else:
-                    self.nextgptext = '{} #{}\nGP {}, {}\nClasificación:\t{}\nCarrera:\t{}\n{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], motocal[nextgp]['clasificacion'][tipo], motocal[nextgp]['carrera'][tipo], goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
+                    self.nextgptext += '{} #{}\nGP {}, {}\nClasificación:\t{}\nCarrera:\t{}\n{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], motocal[nextgp]['clasificacion'][tipo], motocal[nextgp]['carrera'][tipo], goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
 
 
 def get_avs(cual, modo):
