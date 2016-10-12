@@ -1,9 +1,9 @@
+from urllib.parse import quote
 from bs4 import BeautifulSoup
-import logging
 import urllib.request
-import datetime
 import PyRSS2Gen
-import re
+import datetime
+import logging
 import os
 
 pathlog = os.environ['OPENSHIFT_LOG_DIR']
