@@ -45,14 +45,15 @@ if W_titulos[0] != L_titulos[0]:
         pass
 
     for i in range(len(W_enlaces)):
-        urlapi = 'http://www.descargavideos.tv/?web=' + W_enlaces[i]
-        reque = urllib.request.Request(urlapi)
-        reque.add_header('User-Agent', 'Mozilla/5.0')
-        f = urllib.request.urlopen(reque)
-        data = f.read().decode('utf-8', 'ignore')
-        datasoup = BeautifulSoup(data)
+        urlapi = 'http://www.descargavideos.tv/?ajax=1'
+        data = urllib.parse.urlencode({'web': quote(W_enlaces[i], safe='')}).encode()
+        req = urllib.request.Request(urlapi)
+        req.add_header('User-Agent', 'Mozilla/5.0')
+        req.add_header('Content-Type', 'application/x-www-form-urlencoded')
+        r = urllib.request.urlopen(req, data)
+        soup = BeautifulSoup(r.read().decode(), "html.parser")
         try:
-            link = re.findall('linkHtml\(\n\t\t\'(.*)\',', data)[0]
+            link = soup.find('input', {'name': 'video'}).get('value')
             if not link.endswith('.mp4') and not link.endswith('.flv'):
                 raise Exception
             else:
@@ -61,7 +62,7 @@ if W_titulos[0] != L_titulos[0]:
                 logging.debug('%s ... [OK]', W_titulos[i])
         except:
             error = True
-            error_res = datasoup.find('div', 'error_res').string
+            error_res = soup.find('div', 'error_res').string
             W_descarga.append('... [Error!]')
             logging.error('%s, %s ... [Error!]', W_titulos[i], error_res)
             pass
