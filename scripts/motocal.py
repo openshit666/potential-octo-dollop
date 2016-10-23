@@ -109,15 +109,15 @@ def goodTime(timeleft, cual):
             return '@¡¡Live!!@'
         avs = get_avs(cual, 'race')
         return '@¡¡Live!!@\n{}'.format(avs)
-    elif (timeleft.days <= 1 and timeleft.seconds <= 10800) or (timeleft.days == 0 and timeleft.seconds >= 75600):
-        if cual is None:
-            return '{}@'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1])
-        avs = get_avs(cual, 'qualy')
-        return '{}@\n{}'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1], avs)
     elif timeleft.days == 0 and timeleft.seconds <= 75600:
         if cual is None:
             return '{}@'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1])
         avs = get_avs(cual, 'race')
+        return '{}@\n{}'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1], avs)
+    elif timeleft.days <= 2:
+        if cual is None:
+            return '{}@'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1])
+        avs = get_avs(cual, 'qualy')
         return '{}@\n{}'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1], avs)
     if cual is None:
         return '{}@'.format(msg[::-1].replace(' ,', ' y ', 1)[::-1])
