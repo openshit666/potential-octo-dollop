@@ -46,7 +46,7 @@ def get_avs(cual, modo):
     ravs = {}
     allavs = {}
     response = ''
-    url = 'http://www.arenavision.in/agenda'
+    url = 'http://www.arenavision.in/schedule'
     req = urllib.request.Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0')
     f = urllib.request.urlopen(req)
