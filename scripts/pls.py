@@ -49,10 +49,10 @@ class getpls:
             audio = [audios[2].get_text(), audios[1].get_text(), audios[0].get_text()]
         elif self.show == 'wdm' or self.show == 'nano':
             audio = [audios[1].get_text(), audios[0].get_text()]
-        elif show == 'tatw':
+        elif self.show == 'tatw':
             i = choice(range(len(Naudios)))
             audio = [Naudios[i - 1].get('url')]
-        elif show == 'tks':
+        elif self.show == 'tks':
             Ntitles = soup.find_all('a')[5:103]
             i = choice(range(len(Ntitles)))
             audio = ['{}{}'.format(url, Ntitles[i].get('href'))]
