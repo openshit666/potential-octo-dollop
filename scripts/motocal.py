@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from time import strftime, strptime
 from bs4 import BeautifulSoup
+from pytz import timezone
 from json import loads
 import urllib.request
 import locale
@@ -11,9 +12,11 @@ import re
 class mcal:
     def __init__(self):
         locale.setlocale(locale.LC_TIME, '')
-        now = datetime.now() + timedelta(hours=6)
+        tzutc = timezone("UTC")
+        tzmadrid = timezone("Europe/Madrid")
+        now = tzutc.localize(datetime.utcnow()).astimezone(tzmadrid)
         pathrepo = os.environ['OPENSHIFT_REPO_DIR']
-        with open('{}xml/motocal.json'.format(pathrepo), 'r') as r:
+        with open('{}xml/.motocal.json'.format(pathrepo), 'r') as r:
             motocal = loads(r.read())
 
         fin = (now - timedelta(hours=1.5)).strftime('%Y%m%d%H%M%S')
@@ -46,7 +49,7 @@ def get_avs(cual, modo):
     ravs = {}
     allavs = {}
     response = ''
-    url = 'http://www.arenavision.in/schedule'
+    url = 'http://www.arenavision.ru/schedule'
     req = urllib.request.Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0')
     f = urllib.request.urlopen(req)
@@ -78,7 +81,7 @@ def get_avs(cual, modo):
             response += '{}: {} {} -'.format(modo.title(), key, val)
     response = response[::-1].replace('- ', '\n', 1)[::-1]
     for av in lavs:
-        url = 'http://www.arenavision.in/av{}'.format(av)
+        url = 'http://www.arenavision.ru/av{}'.format(av)
         req = urllib.request.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0')
         f = urllib.request.urlopen(req)

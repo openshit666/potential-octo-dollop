@@ -72,9 +72,9 @@ def application(environ, start_response):
         except:
             response_body = '''<!DOCTYPE html><html><head><meta content="charset=UTF-8"/><title>pi-ton</title></head><body><center><form action=""method="post"><input name="session"type="text"size="10"placeholder="And you are...?"style="margin-top:20%;text-align:center"autofocus required><input type="submit"value="Submit"style="display:none"></form></center></body></html>'''
             ctype = 'text/html; charset=UTF-8'
-    elif path == '/nextgp' and ItsMe is True:
-        response_body = mcal().nextgptext
-        ctype = 'text/plain; charset=UTF-8'
+   elif path == '/nextgp' and ItsMe is True:
+       response_body = mcal().nextgptext
+       ctype = 'text/plain; charset=UTF-8'
     elif path == '/report' and ItsMe is True:
         try:
             length = int(environ['CONTENT_LENGTH'])
@@ -93,11 +93,11 @@ def application(environ, start_response):
         r.close()
         ctypes = {'json': 'application/json; charset=UTF-8', 'xml': 'application/xml; charset=UTF-8'}
         ctype = ctypes[path.split('.')[-1]]
-    elif path == '/xml/lostoros.xml':
-        response_body = '''<!DOCTYPE html><html><head><title>404 Not Found</title></head><body bgcolor="white"><h1>404 Not Found</h1><p>The URL you requested could not be found.</p><hr><address>Apache/2.2.15 (Red Hat) Server at pi-ton.rhcloud.com Port 80</address></body></html>'''
-        response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8'))))]
-        start_response('404 Not Found', response_headers)
-        return [response_body.encode('utf8')]
+#    elif path == '/xml/lostoros.xml':
+#        response_body = '''<!DOCTYPE html><html><head><title>404 Not Found</title></head><body bgcolor="white"><h1>404 Not Found</h1><p>The URL you requested could not be found.</p><hr><address>Apache/2.2.15 (Red Hat) Server at pi-ton.rhcloud.com Port 80</address></body></html>'''
+#        response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8'))))]
+#        start_response('404 Not Found', response_headers)
+#        return [response_body.encode('utf8')]
 #    elif path == '/xml/lostoros.xml':
 #        r = open(os.environ['OPENSHIFT_DATA_DIR'] + 'xml/lostoros.xml', 'r')
 #        response_body = r.read()
@@ -121,6 +121,16 @@ def application(environ, start_response):
                 response_headers = [('content-type', 'text/html; charset=UTF-8'), ('content-length', str(len(response_body.encode('utf8')))), ('WWW-Authenticate', 'Basic realm="pls@pi-ton"')]
                 start_response('401 Unauthorized', response_headers)
                 return [response_body.encode('utf8')]
+        else:
+            if redirect is None:
+                start_response('302 Found', [('Location', '/')])
+            else:
+                start_response('302 Found', [('Location', '/login?redirect={}'.format(path))])
+            return ['1']
+    elif path.startswith('/pls/') and path.endswith('.txt') and path.split('/')[-1].replace('.txt', '') in shows:
+        if ItsMe is True:
+            ctype = 'text/plain; charset=UTF-8'
+            response_body = getpls(path.split('/')[-1].replace('.txt', '')).joinedpls
         else:
             if redirect is None:
                 start_response('302 Found', [('Location', '/')])

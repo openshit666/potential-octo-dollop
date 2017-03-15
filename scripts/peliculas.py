@@ -46,6 +46,7 @@ if W_titulos[0] != L_titulos[0]:
 
     rss_items = []
     for i in range(len(enlaces)):
+        # fix titulo vacío
         item = PyRSS2Gen.RSSItem(title=titulos[i],
                                  link=enlaces[i])
         rss_items.append(item)
