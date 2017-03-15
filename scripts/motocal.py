@@ -14,7 +14,7 @@ class mcal:
         locale.setlocale(locale.LC_TIME, '')
         tzutc = timezone("UTC")
         tzmadrid = timezone("Europe/Madrid")
-        now = tzutc.localize(datetime.utcnow()).astimezone(tzmadrid)
+        now = tzutc.localize(datetime.utcnow()).astimezone(tzmadrid).replace(tzinfo=None)
         pathrepo = os.environ['OPENSHIFT_REPO_DIR']
         with open('{}xml/.motocal.json'.format(pathrepo), 'r') as r:
             motocal = loads(r.read())
