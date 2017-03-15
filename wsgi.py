@@ -182,6 +182,7 @@ def application(environ, start_response):
     start_response(status, response_headers)
     return [response_body.encode('utf8')]
 #    return [response_body]
+
 #
 # Below for testing only
 #
