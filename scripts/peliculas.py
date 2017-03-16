@@ -12,7 +12,7 @@ def get_torrent(url):
     req.add_header('User-Agent', 'Mozilla/5.0')
     r = urllib.request.urlopen(req)
     soup = BeautifulSoup(r.read().decode('iso-8859-1'), "html.parser")
-    return 'http://www.moviesdvdr.com/{}'.format(soup.find(string='Descargar TORRENT').parent.get('href'))
+    return 'http://www.moviesdvdr.com/{}'.format(soup.find(text='Descargar TORRENT').parent.get('href'))
 
 
 pathlog = os.environ['OPENSHIFT_LOG_DIR']
