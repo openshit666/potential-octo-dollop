@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ln -sf ${OPENSHIFT_DATA_DIR}/xml/* ${OPENSHIFT_REPO_DIR}/xml/
+ln -sf ${OPENSHIFT_DATA_DIR}/xml/*.{json,xml} ${OPENSHIFT_REPO_DIR}/xml/
 
 #if [[ $(date +"%w") -gt  1 ]]; then
 #        echo "$[$(date +"%-W")+1]1" > ${OPENSHIFT_REPO_DIR}/xml/lostoros.txt;

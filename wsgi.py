@@ -25,8 +25,8 @@ def application(environ, start_response):
         rcookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'session' in rcookie and rcookie['session'].value == 'ItsMe' or rcookie['session'].value == 'itsme':
             ItsMe = True
-        elif 'session' in rcookie and rcookie['session'].value == 'malonso' and path == '/nextgp':
-            ItsMe = True
+        # elif 'session' in rcookie and rcookie['session'].value == 'malonso' and path == '/nextgp':
+        #     ItsMe = True
 
     if 'HTTP_USER_AGENT' in environ:
         if 'Dalvik/1.4.0' in environ['HTTP_USER_AGENT'] or 'Lavf/56.15.102' in environ['HTTP_USER_AGENT']:
