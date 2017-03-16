@@ -1,3 +1,4 @@
 /xml/*.*
 !/xml/.gitkeep
 /scripts/lostoros.py
+____.py
