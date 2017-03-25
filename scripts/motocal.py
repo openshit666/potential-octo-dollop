@@ -54,14 +54,15 @@ def get_avs(cual, modo):
     req.add_header('User-Agent', 'Mozilla/5.0')
     f = urllib.request.urlopen(req)
     soup = BeautifulSoup(f.read().decode('utf-8'), "html.parser")
-    cualgp = soup.find('td', text=re.compile(cual), style="width: 188px").find_next_sibling('td').get_text()
-    qualy = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style="width: 188px") if cual.replace('FORMULA 1', 'QUALIFYING').replace('MOTOGP', 'QP') in x.find_next_sibling('td').find_next_sibling('td').get_text() and cualgp in x.find_next_sibling('td').get_text()]).split(']')))
+    width = soup.select_one('tr > td:nth-of-type(3)').get('style')
+    cualgp = soup.find('td', text=re.compile(cual), style=width).find_next_sibling('td').get_text()
+    qualy = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style=width) if cual.replace('FORMULA 1', 'QUALIFYING').replace('MOTOGP', 'QP') in x.find_next_sibling('td').find_next_sibling('td').get_text() and cualgp in x.find_next_sibling('td').get_text()]).split(']')))
     for q in qualy:
         try:
             qavs[q[-3:]] += sorted([int(av) for av in re.findall('(?<!S)\d+', q)])
         except KeyError:
             qavs[q[-3:]] = sorted([int(av) for av in re.findall('(?<!S)\d+', q)])
-    race = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style="width: 188px") if 'RACE' in x.find_next_sibling('td').find_next_sibling('td').get_text()]).split(']')))
+    race = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style=width) if 'RACE' in x.find_next_sibling('td').find_next_sibling('td').get_text()]).split(']')))
     for r in race:
         try:
             ravs[r[-3:]] += sorted([int(av) for av in re.findall('(?<!S)\d+', r)])
