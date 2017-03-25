@@ -67,7 +67,7 @@ def get_avs(cual, modo):
             qavs[q[-3:]] += sorted([int(av) for av in re.findall('(?<!S)\d+', q)])
         except KeyError:
             qavs[q[-3:]] = sorted([int(av) for av in re.findall('(?<!S)\d+', q)])
-    race = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style=width) if 'RACE' in x.find_next_sibling('td').find_next_sibling('td').get_text()]).split(']')))
+    race = list(filter(None, ' '.join([x.find_next_sibling('td').find_next_sibling('td').find_next_sibling('td').get_text() for x in soup.find_all('td', text=re.compile(cual), style=width) if 'RACE' in x.find_next_sibling('td').find_next_sibling('td').get_text() and cualgp in x.find_next_sibling('td').get_text()]).split(']')))
     for r in race:
         try:
             ravs[r[-3:]] += sorted([int(av) for av in re.findall('(?<!S)\d+', r)])
@@ -90,6 +90,7 @@ def get_avs(cual, modo):
         url = 'http://www.arenavision.ru/av{}'.format(av)
         req = urllib.request.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0')
+        req.add_header('Referer', 'http://www.arenavision.ru/schedule')
         f = urllib.request.urlopen(req)
         soup = BeautifulSoup(f.read().decode('utf-8'), "html.parser")
         allavs[av] = soup.find(href=re.compile('acestream://')).get('href').replace('acestream://', '')
