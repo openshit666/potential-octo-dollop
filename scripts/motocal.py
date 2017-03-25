@@ -17,10 +17,13 @@ class mcal:
         now = tzutc.localize(datetime.utcnow()).astimezone(tzmadrid).replace(tzinfo=None)
         pathrepo = os.environ['OPENSHIFT_REPO_DIR']
         with open('{}xml/.motocal.json'.format(pathrepo), 'r') as r:
-            motocal = loads(r.read())
+            cal = loads(r.read())
+            motocal = cal['motor']
+            ciclical = cal['ciclismo']
 
         fin = (now - timedelta(hours=1.5)).strftime('%Y%m%d%H%M%S')
         gps = [k for k in sorted(motocal.keys()) if int(fin) < int(k)]
+        gpscicli = [k for k in sorted(ciclical.keys()) if int(fin) < int(k)]
 
         self.nextgptext = ''
         for i in range(len(gps[:4])):
@@ -42,6 +45,8 @@ class mcal:
                     self.nextgptext += '{} #{}\nGP {}, {}\nClasificación/Carrera:\n{}{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], text, goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'MOTOGP'))
                 else:
                     self.nextgptext += '{} #{}\nGP {}, {}\nClasificación:\t{}\nCarrera:\t{}\n{}\n\n'.format(strftime('%A %-d %B', strptime(nextgp[:-6], '%Y%m%d')).title(), tipo, motocal[nextgp]['gp'], motocal[nextgp]['location'], motocal[nextgp]['clasificacion'][tipo], motocal[nextgp]['carrera'][tipo], goodTime(datetime.strptime('{}{}:00'.format(nextgp[:-6], motocal[nextgp]['carrera'][tipo]), '%Y%m%d%H:%M:%S') - now, 'FORMULA 1'))
+        if len(gpscicli) > 1:
+            self.nextgptext += '\033[1;4;92m{}, {}@, {}\033[0m \033[1;4;96m#Ciclismo\033[0m'.format(strftime('%A %-d %B', strptime(gpscicli[0][:-6], '%Y%m%d')).title(), goodTime(datetime.strptime(gpscicli[0][:-2], '%Y%m%d%H%M') - datetime.now(), None).split(',')[0], ciclical[gpscicli[0]]['name'])
 
 
 def get_avs(cual, modo):
