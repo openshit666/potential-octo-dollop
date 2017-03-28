@@ -6,7 +6,7 @@ import urllib.error
 
 class getpls:
     def __init__(self, show):
-        self.programas = {'wdm': {'radio': 'Los40', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/483.xml'}, 'nano': {'radio': 'LaMáxima', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/767.xml'}, 'armin': {'radio': 'LaMáxima', 'feed': 'https://miroppb.com/rss'}, 'insomnia': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236303/podcast.xml'}, 'climax': {'radio': 'LaMáxima', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/707.xml'}, 'funk': {'radio': 'LaMáxima', 'feed': 'http://fapi-top.prisasd.com/podcast/maximafm/funk_and_show.xml'}, 'chillout': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236321/podcast.xml'}, 'europa': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236312/podcast.xml'}, 'atodojazz': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1875'.format(choice(range(1, 45)))}, 'jazzporquesi': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1999'.format(choice(range(1, 58)))}, 'tatw': {'radio': 'LaMáxima', 'feed': 'https://cdn.trancearoundtheworld.co.uk/podcasts/tatw/feed.xml'}, 'gtr': {'radio': 'LaMáxima', 'feed': 'http://static.aboveandbeyond.nu/grouptherapy/podcast.xml'}, 'tks': {'radio': 'LaMáxima', 'feed': 'http://www.djvytl.com/karandashow/'}}
+        self.programas = {'wdm': {'radio': 'Los40', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/483.xml'}, 'nano': {'radio': 'LaMáxima', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/767.xml'}, 'armin': {'radio': 'LaMáxima', 'feed': 'https://miroppb.com/rss'}, 'insomnia': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236303/podcast.xml'}, 'climax': {'radio': 'LaMáxima', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/707.xml'}, 'funk': {'radio': 'LaMáxima', 'feed': 'http://fapi-top.prisasd.com/podcast/maximafm/funk_and_show.xml'}, 'chillout': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236321/podcast.xml'}, 'europa': {'radio': 'EuropaFM', 'feed': 'http://www.europafm.com/rss/podcast/236312/podcast.xml'}, 'atodojazz': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1875'.format(choice(range(1, 45)))}, 'jazzporquesi': {'radio': 'RNE', 'feed': 'http://www.rtve.es/alacarta/interno/contenttable.shtml?pbq={}&orderCriteria=DESC&modl=TOC&locale=es&pageSize=15&ctx=1999'.format(choice(range(1, 58)))}, 'tatw': {'radio': 'LaMáxima', 'feed': 'https://cdn.trancearoundtheworld.co.uk/podcasts/tatw/feed.xml'}, 'gtr': {'radio': 'LaMáxima', 'feed': 'http://static.aboveandbeyond.nu/grouptherapy/podcast.xml'}, 'rys': {'radio': 'LaMáxima', 'feed': 'https://www.thisisdistorted.com/repository/xml/rogersanchezreleaseyourself1463481576.xml'}, 'nsn': {'radio': 'LaSer', 'feed': 'http://urotrosfiles.media.streamtheworld.com/otrosfiles/podcasts/488.xml'}}
         self.allpro = list(self.programas.keys()) + ['random', 'randomdance', 'randomjazz']
         if show == 'random':
             self.show = choice(list(self.programas.keys()))
@@ -26,19 +26,19 @@ class getpls:
 
     def get_last(self):
         url = self.programas[self.show]['feed']
-        radio = self.programas[self.show]['radio']
+        # radio = self.programas[self.show]['radio']
         req = urllib.request.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0')
-        z = 0
-        while z < 11:
-            z+=1
-            try:
-                f = urllib.request.urlopen(req)
-                break
-            except urllib.error.URLError as e:
-                if str(e.reason) != '[Errno 104] Connection reset by peer':
-                    return None
-
+        # z = 0
+        # while z < 11:
+        #     z += 1
+        #     try:
+        #         f = urllib.request.urlopen(req)
+        #         break
+        #     except urllib.error.URLError as e:
+        #         if str(e.reason) != '[Errno 104] Connection reset by peer':
+        #             return None
+        f = urllib.request.urlopen(req)
         soup = BeautifulSoup(f.read().decode(), "html.parser")
         audios = soup.find_all('guid')
         Naudios = soup.find_all('enclosure')
@@ -52,10 +52,8 @@ class getpls:
         elif self.show == 'tatw':
             i = choice(range(len(Naudios)))
             audio = [Naudios[i - 1].get('url')]
-        elif self.show == 'tks':
-            Ntitles = soup.find_all('a')[5:103]
-            i = choice(range(len(Ntitles)))
-            audio = ['{}{}'.format(url, Ntitles[i].get('href'))]
+        elif self.show == 'nsn':
+            audio = audios[0].get_text()
         else:
             audio = [audios[0].get_text()]
         self.joinedpls = '[playlist]\n{}\nTitle{}={}\nNumberOfEntries={}\nVersion=2'.format('\n'.join(['File{}={}'.format(i + 1, audio[i]) for i in range(len(audio))]), len(audio), self.show, len(audio))
