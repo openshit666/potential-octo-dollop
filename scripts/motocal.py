@@ -54,9 +54,10 @@ def get_avs(cual, modo):
     ravs = {}
     allavs = {}
     response = ''
-    url = 'http://www.arenavision.ru/schedule'
+    url = 'https://www.arenavision.ru/guide'
     req = urllib.request.Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0')
+    req.add_header('Cookie', 'beget=begetok')
     f = urllib.request.urlopen(req)
     soup = BeautifulSoup(f.read().decode('utf-8'), "html.parser")
     width = soup.select_one('tr > td:nth-of-type(3)').get('style')
@@ -87,10 +88,11 @@ def get_avs(cual, modo):
             response += '{}: {} {} -'.format(modo.title(), key, val)
     response = response[::-1].replace('- ', '\n', 1)[::-1]
     for av in lavs:
-        url = 'http://www.arenavision.ru/av{}'.format(av)
+        url = 'https://www.arenavision.ru/av{}'.format(av)
         req = urllib.request.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0')
-        req.add_header('Referer', 'http://www.arenavision.ru/schedule')
+        req.add_header('Cookie', 'beget=begetok')
+        req.add_header('Referer', 'https://www.arenavision.ru/guide')
         f = urllib.request.urlopen(req)
         soup = BeautifulSoup(f.read().decode('utf-8'), "html.parser")
         allavs[av] = soup.find(href=re.compile('acestream://')).get('href').replace('acestream://', '')
